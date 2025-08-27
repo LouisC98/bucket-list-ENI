@@ -56,6 +56,10 @@
     footer {
         @apply fixed bottom-0 left-0 bg-bucket-neutral-900 text-white w-full text-center py-3 text-sm;
     }
+
+    .wishCard {
+        @apply mx-auto sm:w-2/3 w-full grid p-2 rounded border-gray-200 border shadow my-2 scroll-mt-30;
+    }
 }
 
 @layer utilities {
