@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau souhait | {{ parent() }}{% endblock %}
+
+{% block body %}
+    <section class="w-full px-2 pt-5">
+        <h1 class="text-center font-semibold text-xl my-3">Nouveau souhait</h1>
+
+        {{ include('wish/_form.html.twig') }}
+
+        <div class="mt-5 text-center">
+            <a href="{{ path('app_home') }}" class="btn-secondary">Retour a la liste</a>
+        </div>
+    </section>
+{% endblock %}
