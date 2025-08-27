@@ -25,27 +25,7 @@ final class WishController extends AbstractController
 //        ]);
 //    }
 
-    #[Route('/new', name: 'app_wish_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $wish = new Wish();
-        $form = $this->createForm(WishType::class, $wish);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($wish);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('wish/new.html.twig', [
-            'wish' => $wish,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/search', name: 'app_wish_search', methods: ['GET'])]
+    #[Route('/', name: 'app_wish_index', methods: ['GET'])]
     public function search(Request $request, WishRepository $wishRepository): Response
     {
         $searchInput = $request->query->getString('search');
@@ -65,22 +45,54 @@ final class WishController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_wish_show', requirements: ['id'=>'\d+'], methods: ['GET'])]
-    public function show(Wish $wish): Response
+    #[Route('/new', name: 'app_wish_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $wish = new Wish();
+        $form = $this->createForm(WishType::class, $wish);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($wish);
+            $entityManager->flush();
+            $this->addFlash('success', 'Wish crée ! ✅');
+
+            return $this->redirectToRoute('app_wish_show', ['id' => $wish->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('wish/new.html.twig', [
+            'wish' => $wish,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_wish_show', requirements: ['id'=>'\d+'], methods: ['GET'])]
+    public function show(int $id, WishRepository $wishRepository): Response
+    {
+        $wish = $wishRepository->find($id);
+        if (!$wish) {
+            $this->addFlash('error', 'Wish non trouvé ❌');
+            return $this->redirectToRoute('app_wish_index', [], Response::HTTP_SEE_OTHER);
+        }
         return $this->render('wish/show.html.twig', [
             'wish' => $wish,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_wish_edit', requirements: ['id'=>'\d+'], methods: ['GET', 'POST'])]
-    public function edit(Request $request, Wish $wish, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, int $id, WishRepository $wishRepository, EntityManagerInterface $entityManager): Response
     {
+        $wish = $wishRepository->find($id);
+        if (!$wish) {
+            $this->addFlash('error', 'Wish non trouvé ❌');
+            return $this->redirectToRoute('app_wish_index', [], Response::HTTP_SEE_OTHER);
+        }
         $form = $this->createForm(WishType::class, $wish);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $this->addFlash('success', 'Wish modifié ! ✅');
 
             return $this->redirectToRoute('app_wish_show', ['id' => $wish->getId()], Response::HTTP_SEE_OTHER);
         }
@@ -92,12 +104,11 @@ final class WishController extends AbstractController
     }
 
     #[Route('/{id}/status', name: 'app_wish_status', requirements: ['id'=>'\d+'], methods: ['PATCH'])]
-    public function changeWishStatus(Request $request, Wish $wish, EntityManagerInterface $entityManager, RouterInterface $router): Response
+    public function changeWishStatus(Wish $wish, EntityManagerInterface $entityManager): Response
     {
         try {
             $wish->setIsCompleted(!$wish->isCompleted());
             $entityManager->flush();
-
             return new JsonResponse(['isCompleted' => $wish->isCompleted()]);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);

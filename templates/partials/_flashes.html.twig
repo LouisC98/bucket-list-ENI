@@ -1,0 +1,13 @@
+{% for status, messages in app.flashes %}
+    {% for message in messages %}
+            <div id="flashMsg-{{ loop.parent.loop.index }}-{{ loop.index }}" class="absolute right-3 top-25 z-100  text-white p-5 rounded shadow-md opacity-90 font-semibold
+            {% if status == 'success' %}
+                bg-green-400
+            {% elseif status == 'error' %}
+                bg-red-500
+            {% endif %}
+            ">
+                {{ message }}
+            </div>
+    {% endfor %}
+{% endfor %}

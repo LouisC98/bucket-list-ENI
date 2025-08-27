@@ -31,7 +31,7 @@
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => {
                     console.log(searchTerm);
-                    fetch(`{{ path('app_wish_search') }}?search=${encodeURIComponent(searchTerm)}`,  {
+                    fetch(`{{ path('app_wish_index') }}?search=${encodeURIComponent(searchTerm)}`,  {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
                         }
@@ -50,7 +50,13 @@
                     fetch(btn.dataset.wishUrl, { method: 'PATCH' })
                         .then(response => response.json())
                         .then(data => {
-                            btn.textContent = data.isCompleted ? '✅' : '❌';
+                            if (data.isCompleted) {
+                                btn.textContent = '✅';
+                                // showNotification('Wish réalisé !', 'success');
+                            } else {
+                                btn.textContent = '❌';
+                                // showNotification('Wish annulé !', 'error');
+                            }
                         });
                 }
             });
