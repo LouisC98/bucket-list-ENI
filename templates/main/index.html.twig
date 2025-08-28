@@ -9,10 +9,28 @@
             <a href="{{ path('app_wish_new') }}" class="btn-primary p-3">Nouveau souhait</a>
         </div>
 
-        <div class="text-center">
-            <span class="text-lg font-semibold me-4">Trier :</span>
-            <label for="searchInput" class="me-2">Rechercher </label>
-            <input type="text" name="searchInput" id="searchInput" class="p-1 border rounded" data-search-url="{{ path('app_wish_index') }}">
+        <div class="text-center my-6 flex justify-center items-center gap-4">
+            <div>
+                <label for="searchInput" class="me-2">Rechercher</label>
+                <input type="text" id="searchInput" class="p-1 border rounded" value="{{ app.request.query.get('search') }}" data-search-url="{{ path('app_wish_index') }}">
+            </div>
+            <div>
+                <label for="sortSelect" class="me-2">Trier par</label>
+                <select id="sortSelect" class="p-1 border rounded">
+                    <option value="" {{ app.request.query.get('sort') is empty ? 'selected' : '' }}>-- Trier --</option>
+                    <option value="newest" {{ app.request.query.get('sort') == 'newest' ? 'selected' : '' }}>Plus récents</option>
+                    <option value="oldest" {{ app.request.query.get('sort') == 'oldest' ? 'selected' : '' }}>Plus anciens</option>
+                </select>
+            </div>
+            <div class="flex gap-3 items-center">
+                <label for="complete">Complété
+                    <input type="checkbox" name="complete" id="complete" class="transform scale-150 accent-green-500 cursor-pointer ms-2">
+                </label>
+
+                <label for="incomplete">Incomplet
+                    <input type="checkbox" name="incomplete" id="incomplete" class="transform scale-150 accent-red-500 cursor-pointer ms-2">
+                </label>
+            </div>
         </div>
 
         <div id="wishesContainer">

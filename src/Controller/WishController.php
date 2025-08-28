@@ -30,9 +30,24 @@ final class WishController extends AbstractController
     {
         $searchInput = $request->query->getString('search');
 
-        $wishes = $searchInput ?
-            $wishRepository->findByCriteria($searchInput) :
-            $wishRepository->findAll();
+        $sort = $request->query->getString('sort');
+        $orderBy = [];
+
+        if ($sort) {
+            $order = $sort === 'oldest' ? 'ASC' : 'DESC';
+            $orderBy = ['createdAt' => $order];
+        }
+
+        $statusParam = $request->query->get('status');
+        $isCompleted = null;
+
+        if ($statusParam === '1' || $statusParam === 'true') {
+            $isCompleted = true;
+        } elseif ($statusParam === '0' || $statusParam === 'false') {
+            $isCompleted = false;
+        }
+
+        $wishes = $wishRepository->findByCriteria($searchInput, $orderBy, $isCompleted);
 
         if ($request->isXmlHttpRequest()) {
             return $this->render('main/_wishes_list.html.twig', [

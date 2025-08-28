@@ -2,28 +2,55 @@ import {showNotification} from './utils.js';
 
 document.addEventListener('turbo:load', function() {
     const searchInput = document.getElementById('searchInput');
+    const sortSelect = document.getElementById('sortSelect');
+    const wishesContainer = document.getElementById('wishesContainer');
+    const completeCheckbox = document.getElementById('complete');
+    const incompleteCheckbox = document.getElementById('incomplete');
+    function fetchWishes() {
+        const searchValue = searchInput ? searchInput.value : '';
+        const sortValue = sortSelect ? sortSelect.value : 'newest';
+        const searchUrl = searchInput.dataset.searchUrl;
+
+        let status = null;
+        if (completeCheckbox.checked) status = true;
+        else if (incompleteCheckbox.checked) status = false;
+
+        fetch(`${searchUrl}?search=${encodeURIComponent(searchValue)}&sort=${sortValue}&status=${status}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            wishesContainer.innerHTML = html;
+        });
+    }
+
     if (searchInput) {
         let searchTimeout;
-        searchInput.addEventListener('input', function(e) {
-            const searchTerm = e.target.value;
+        searchInput.addEventListener('input', function() {
             clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                const searchUrl = searchInput.dataset.searchUrl;
-                fetch(`${searchUrl}?search=${encodeURIComponent(searchTerm)}`,  {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                    .then(response => response.text())
-                    .then(html => {
-                        document.getElementById('wishesContainer').innerHTML = html;
-                    });
-            }, 300);
+            searchTimeout = setTimeout(fetchWishes, 300);
+        });
+    }
+
+    if (sortSelect) {
+        sortSelect.addEventListener('change', fetchWishes);
+    }
+
+    if (completeCheckbox && incompleteCheckbox) {
+        completeCheckbox.addEventListener('change', () => {
+            incompleteCheckbox.checked = false;
+            fetchWishes()
+        });
+        incompleteCheckbox.addEventListener('change', () => {
+            completeCheckbox.checked = false;
+            fetchWishes()
         });
     }
 
     const containers = [
-        document.getElementById('wishesContainer'),
+        wishesContainer,
         document.getElementById('changeWishStatus')
     ].filter(Boolean);
 
