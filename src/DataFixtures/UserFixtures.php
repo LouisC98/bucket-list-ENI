@@ -21,18 +21,19 @@ class UserFixtures extends Fixture
     {
         $faker = Factory::create("fr_FR");
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $user = new User();
-            $user->setEmail($faker->email());
+            $user->setEmail($faker->unique()->email());
             $user->setFirstName($faker->firstName());
             $user->setLastName($faker->lastName());
-            $user->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeThisDecade()));
+            $user->setCreatedAt(\DateTimeImmutable::createFromMutable(
+                $faker->dateTimeBetween('-2 years', 'now')
+            ));
 
             $hashedPassword = $this->passwordHasher->hashPassword($user, 'password123');
             $user->setPassword($hashedPassword);
 
             $manager->persist($user);
-
             $this->addReference('user-' . $i, $user);
         }
 

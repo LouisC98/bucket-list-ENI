@@ -37,14 +37,6 @@ class Wish
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt;
 
-    #[ORM\Column(length: 50)]
-    #[Assert\NotBlank(message: "L'auteur ne peut pas être vide")]
-    #[Assert\Length(
-        max: 50,
-        maxMessage: "Le nom de l'auteur ne peut pas dépasser {{ limit }} caractères"
-    )]
-    private ?string $author = null;
-
     #[ORM\Column]
     private ?bool $isPublished = false;
 
@@ -53,12 +45,14 @@ class Wish
 
     #[ORM\ManyToOne(inversedBy: 'wishes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private ?User $author = null;
 
     #[ORM\PrePersist]
     public function onPersist(): void
     {
-        $this->createdAt = new \DateTimeImmutable();
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
     }
 
     #[ORM\PreUpdate]
@@ -120,18 +114,6 @@ class Wish
         return $this;
     }
 
-    public function getAuthor(): ?string
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(string $author): static
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
     public function isPublished(): ?bool
     {
         return $this->isPublished;
@@ -156,14 +138,14 @@ class Wish
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getAuthor(): ?User
     {
-        return $this->user;
+        return $this->author;
     }
 
-    public function setUser(?User $user): static
+    public function setAuthor(?User $author): static
     {
-        $this->user = $user;
+        $this->author = $author;
 
         return $this;
     }

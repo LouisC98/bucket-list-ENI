@@ -18,14 +18,22 @@ class WishRepository extends ServiceEntityRepository
         parent::__construct($registry, Wish::class);
     }
 
-    public function findByCriteria(string $search = "", array $orderBy = [], bool $isCompleted = null): array
+    public function findByCriteria(string $search = "", array $orderBy = [], bool $isCompleted = null, bool $isPublished = true, int $userId = null): array
     {
         $qb = $this->createQueryBuilder('w');
 
         if ($search) {
-            $qb->where('w.title LIKE :search')
-                ->orWhere('w.author LIKE :search')
-                ->setParameter('search', '%'.$search.'%');
+            $qb->leftJoin('w.author', 'a')
+                ->where('w.title LIKE :search')
+                ->orWhere('a.firstName LIKE :search')
+                ->orWhere('a.lastName LIKE :search')
+                ->orWhere("CONCAT(a.firstName, ' ', a.lastName) LIKE :search")
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($isPublished) {
+            $qb->andWhere('w.isPublished = :isPublished')
+                ->setParameter('isPublished', true);
         }
 
         if ($isCompleted !== null) {
@@ -33,8 +41,17 @@ class WishRepository extends ServiceEntityRepository
             $qb->setParameter('isCompleted', $isCompleted);
         }
 
-        foreach ($orderBy as $field => $direction) {
-            $qb->addOrderBy('w.'.$field, $direction);
+        if ($userId !== null) {
+            $qb->andWhere('w.author = :userId');
+            $qb->setParameter('userId', $userId);
+        }
+
+        if (empty($orderBy)) {
+            $qb->orderBy('RAND()');
+        } else {
+            foreach ($orderBy as $field => $direction) {
+                $qb->addOrderBy('w.'.$field, $direction);
+            }
         }
 
         return $qb->getQuery()

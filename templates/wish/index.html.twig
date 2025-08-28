@@ -1,41 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Wish index{% endblock %}
+{% block title %}Wishes | {{ parent() }}{% endblock %}
 
 {% block body %}
-    <h1>Wish index</h1>
+    <section class="mx-auto px-2 pt-5 pb-16" data-turbo="false">
+        <h2 class="text-4xl text-center font-semibold my-4">
+            {% if isOwner %}
+                My Wishes
+                {% else %}
+                Wishes de {{ user.firstName }} {{ user.lastName }}
+            {% endif %}
+        </h2>
+        <div class="text-center my-6">
+            <a href="{{ path('app_wish_new') }}" class="btn-primary p-3">Nouveau souhait</a>
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>IsCompleted</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for wish in wishes %}
-            <tr>
-                <td>{{ wish.id }}</td>
-                <td>{{ wish.title }}</td>
-                <td>{{ wish.description }}</td>
-                <td>{{ wish.isCompleted ? 'Yes' : 'No' }}</td>
-                <td>{{ wish.createdAt ? wish.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_wish_show', {'id': wish.id}) }}">show</a>
-                    <a href="{{ path('app_wish_edit', {'id': wish.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        {% include 'partials/search_comp.html.twig' with {
+            'searchUrl': path('app_wish_user', {id: user.id})
+        } %}
 
-    <a href="{{ path('app_wish_new') }}">Create new</a>
+        <div id="wishesContainer">
+            {% include 'partials/_wishes_list.html.twig' %}
+        </div>
+    </section>
 {% endblock %}

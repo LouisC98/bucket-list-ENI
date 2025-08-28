@@ -1,0 +1,28 @@
+<div class="text-center my-6 flex justify-center items-center gap-4 flex-wrap">
+    <div>
+        <label for="searchInput" class="me-2">Rechercher</label>
+        <input type="text" id="searchInput" class="p-1 border rounded"
+               value="{{ app.request.query.get('search') }}"
+               data-search-url="{{ searchUrl ?? path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}">
+    </div>
+    <div>
+        <label for="sortSelect" class="me-2">Trier par</label>
+        <select id="sortSelect" class="p-1 border rounded">
+            <option value="" {{ app.request.query.get('sort') is empty ? 'selected' : '' }} class="text-center">-- Tri --</option>
+            <option value="newest" {{ app.request.query.get('sort') == 'newest' or orderByDESC is defined ? 'selected' : '' }}>Plus récents</option>
+            <option value="oldest" {{ app.request.query.get('sort') == 'oldest' ? 'selected' : '' }}>Plus anciens</option>
+        </select>
+    </div>
+    <div class="flex gap-3 items-center">
+        <label for="complete">Complété
+            <input type="checkbox" name="complete" id="complete" class="transform scale-150 accent-green-500 cursor-pointer ms-2">
+        </label>
+
+        <label for="incomplete">Incomplet
+            <input type="checkbox" name="incomplete" id="incomplete" class="transform scale-150 accent-red-500 cursor-pointer ms-2">
+        </label>
+    </div>
+    {% if user is defined and user %}
+        <input type="hidden" value="{{ user.id }}" id="userId">
+    {% endif %}
+</div>

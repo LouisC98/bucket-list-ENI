@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Wish;
 use App\Form\WishType;
+use App\Repository\UserRepository;
 use App\Repository\WishRepository;
+use App\Service\WishSearchService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,46 +19,32 @@ use Symfony\Component\Routing\RouterInterface;
 #[Route('/wish')]
 final class WishController extends AbstractController
 {
-//    #[Route(name: 'app_wish_index', methods: ['GET'])]
-//    public function index(WishRepository $wishRepository): Response
-//    {
-//        return $this->render('wish/index.html.twig', [
-//            'wishes' => $wishRepository->findAll(),
-//        ]);
-//    }
-
-    #[Route('/', name: 'app_wish_index', methods: ['GET'])]
-    public function search(Request $request, WishRepository $wishRepository): Response
+    #[Route('/user/{id}', name: 'app_wish_user', requirements: ['id'=>'\d+'], methods: ['GET'])]
+    public function userWishes(int $id, Request $request, WishSearchService $searchService, UserRepository $userRepository): Response
     {
-        $searchInput = $request->query->getString('search');
+        $currentUser = $this->getUser();
+        $targetUser = $userRepository->find($id);
 
-        $sort = $request->query->getString('sort');
-        $orderBy = [];
-
-        if ($sort) {
-            $order = $sort === 'oldest' ? 'ASC' : 'DESC';
-            $orderBy = ['createdAt' => $order];
+        if (!$targetUser || !$currentUser) {
+            $this->addFlash('error', 'Utilisateur non trouvé');
+            return $this->redirectToRoute('app_home');
         }
 
-        $statusParam = $request->query->get('status');
-        $isCompleted = null;
+        $isOwner = $currentUser->getId() === $targetUser->getId();
+        $showOnlyPublished = !$isOwner;
 
-        if ($statusParam === '1' || $statusParam === 'true') {
-            $isCompleted = true;
-        } elseif ($statusParam === '0' || $statusParam === 'false') {
-            $isCompleted = false;
-        }
-
-        $wishes = $wishRepository->findByCriteria($searchInput, $orderBy, $isCompleted);
+        $wishes = $searchService->searchFromRequest($request, $showOnlyPublished, $targetUser->getId());
 
         if ($request->isXmlHttpRequest()) {
-            return $this->render('main/_wishes_list.html.twig', [
+            return $this->render('partials/_wishes_list.html.twig', [
                 'wishes' => $wishes,
             ]);
         }
 
-        return $this->render('main/index.html.twig', [
+        return $this->render('wish/index.html.twig', [
             'wishes' => $wishes,
+            'isOwner' => $isOwner,
+            'user' => $targetUser
         ]);
     }
 

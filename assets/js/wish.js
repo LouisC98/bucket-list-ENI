@@ -6,7 +6,9 @@ document.addEventListener('turbo:load', function() {
     const wishesContainer = document.getElementById('wishesContainer');
     const completeCheckbox = document.getElementById('complete');
     const incompleteCheckbox = document.getElementById('incomplete');
+    const userIdInput = document.getElementById('userId');
     function fetchWishes() {
+        const userId = userIdInput ? userIdInput.value : null;
         const searchValue = searchInput ? searchInput.value : '';
         const sortValue = sortSelect ? sortSelect.value : 'newest';
         const searchUrl = searchInput.dataset.searchUrl;
@@ -15,7 +17,9 @@ document.addEventListener('turbo:load', function() {
         if (completeCheckbox.checked) status = true;
         else if (incompleteCheckbox.checked) status = false;
 
-        fetch(`${searchUrl}?search=${encodeURIComponent(searchValue)}&sort=${sortValue}&status=${status}`, {
+        console.log(userId)
+
+        fetch(`${searchUrl}?search=${encodeURIComponent(searchValue)}&sort=${sortValue}&status=${status}&userId=${userId}`, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }

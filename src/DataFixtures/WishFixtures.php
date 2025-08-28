@@ -16,15 +16,17 @@ class WishFixtures extends Fixture
 
         for ($i = 0; $i < 20; $i++) {
             $wish = new Wish();
-            $wish->setTitle($faker->realText(50));
-            $wish->setDescription($faker->realText(200));
-            $wish->setAuthor($faker->name());
-            $wish->setIsPublished($faker->boolean(50));
-            $wish->setIsCompleted($faker->boolean(30));
-            $wish->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeThisDecade()));
+            $wish->setTitle($faker->sentence(6, true));
+            $wish->setDescription($faker->optional(0.8)->paragraph(3));
+            $wish->setIsPublished($faker->boolean(70));
+            $wish->setIsCompleted($faker->boolean(20));
+
+            $wish->setCreatedAt(\DateTimeImmutable::createFromMutable(
+                $faker->dateTimeBetween('-2 years', 'now')
+            ));
 
             $userRef = 'user-' . $faker->numberBetween(0, 4);
-            $wish->setUser($this->getReference($userRef, User::class));
+            $wish->setAuthor($this->getReference($userRef, User::class));
 
             $manager->persist($wish);
         }

@@ -14,6 +14,7 @@
         <a href="{{ path('app_wish_new') }}" class="block p-2">Nouveau souhait</a>
         <a href="{{ path('app_about') }}" class="block p-2">À propos</a>
         {% if app.user %}
+            <a href="{{ path('app_wish_user', {id: app.user.id}) }}" class="block p-2">My Wish</a>
             <a href="{{ path('app_logout') }}" class="block p-2">Se déconnecter</a>
         {% else %}
             <a href="{{ path('app_login') }}" class="block p-2">Se connecter</a>
@@ -25,6 +26,7 @@
         <a href="{{ path('app_wish_new') }}">Nouveau souhait</a>
         <a href="{{ path('app_about') }}">À propos</a>
         {% if app.user %}
+            <a href="{{ path('app_wish_user', {id: app.user.id}) }}">My Wish</a>
             <a href="{{ path('app_logout') }}">Se déconnecter</a>
         {% else %}
             <a href="{{ path('app_login') }}">Se connecter</a>

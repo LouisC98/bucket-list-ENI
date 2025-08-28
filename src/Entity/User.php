@@ -41,21 +41,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank(
-        message: 'Le prénom est obligatoire',
+    #[Assert\NotBlank(message: 'Le prénom est obligatoire')]
+    #[Assert\Length(
+        max: 50,
+        maxMessage: "Le prénom de l'auteur ne peut pas dépasser {{ limit }} caractères"
     )]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 100)]
-    #[Assert\NotBlank(
-        message: 'Le nom est obligatoire',
+    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: "Le nom de l'auteur ne peut pas dépasser {{ limit }} caractères"
     )]
     private ?string $lastName = null;
 
     /**
      * @var Collection<int, Wish>
      */
-    #[ORM\OneToMany(targetEntity: Wish::class, mappedBy: 'user', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Wish::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $wishes;
 
     #[ORM\Column]
@@ -180,7 +184,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->wishes->contains($wish)) {
             $this->wishes->add($wish);
-            $wish->setUser($this);
+            $wish->setAuthor($this);
         }
 
         return $this;
@@ -190,8 +194,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->wishes->removeElement($wish)) {
             // set the owning side to null (unless already changed)
-            if ($wish->getUser() === $this) {
-                $wish->setUser(null);
+            if ($wish->getAuthor() === $this) {
+                $wish->setAuthor(null);
             }
         }
 
