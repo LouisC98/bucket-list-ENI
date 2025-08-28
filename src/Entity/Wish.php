@@ -50,9 +50,7 @@ class Wish
     #[ORM\PrePersist]
     public function onPersist(): void
     {
-        if ($this->createdAt === null) {
-            $this->createdAt = new \DateTimeImmutable();
-        }
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]

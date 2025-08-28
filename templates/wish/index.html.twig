@@ -1,22 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Wishes | {{ parent() }}{% endblock %}
+{% block title %}
+    {% if isOwner %}
+        My Wishes
+    {% else %}
+        {{ user.firstName }} {{ user.lastName }}
+    {% endif %}
+    | {{ parent() }}
+{% endblock %}
 
 {% block body %}
-    <section class="mx-auto px-2 pt-5 pb-16" data-turbo="false">
+    <section class="mx-auto px-2 pt-5 pb-16">
         <h2 class="text-4xl text-center font-semibold my-4">
             {% if isOwner %}
-                My Wishes
+                Ma bucket list
                 {% else %}
-                Wishes de {{ user.firstName }} {{ user.lastName }}
+                Bucket list de {{ user.firstName }} {{ user.lastName }}
             {% endif %}
         </h2>
-        <div class="text-center my-6">
-            <a href="{{ path('app_wish_new') }}" class="btn-primary p-3">Nouveau souhait</a>
-        </div>
+        {% if isOwner %}
+            <div class="text-center my-6">
+                <a href="{{ path('app_wish_new') }}" class="btn-primary p-3">Nouveau souhait</a>
+            </div>
+        {% endif %}
 
         {% include 'partials/search_comp.html.twig' with {
-            'searchUrl': path('app_wish_user', {id: user.id})
+            'searchUrl': path('app_wish_user', {id: user.id}),
+            'orderByDESC': true
         } %}
 
         <div id="wishesContainer">

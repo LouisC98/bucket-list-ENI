@@ -13,7 +13,7 @@ class WishSearchService
 
     public function searchFromRequest(Request $request, bool $showOnlyPublished = true, ?int $userId = null): array
     {
-        $criteria = $this->parseSearchCriteria($request);
+        $criteria = $this->parseSearchCriteria($request, $userId);
 
         return $this->wishRepository->findByCriteria(
             $criteria['search'],
@@ -24,7 +24,7 @@ class WishSearchService
         );
     }
 
-    private function parseSearchCriteria(Request $request): array
+    private function parseSearchCriteria(Request $request, int $userId = null): array
     {
         $searchInput = $request->query->getString('search');
 
@@ -33,6 +33,8 @@ class WishSearchService
         if ($sort) {
             $order = $sort === 'oldest' ? 'ASC' : 'DESC';
             $orderBy = ['createdAt' => $order];
+        } elseif ($userId !== null) {
+            $orderBy = ['createdAt' => 'DESC'];
         }
 
         $statusParam = $request->query->get('status');

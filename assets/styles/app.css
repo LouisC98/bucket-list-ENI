@@ -3,40 +3,40 @@
 
 /* Configuration des couleurs bucket list */
 @theme {
-    --color-bucket-primary-50: #eff6ff;
-    --color-bucket-primary-500: #3b82f6;
-    --color-bucket-primary-600: #2563eb;
-    --color-bucket-primary-700: #1d4ed8;
-    --color-bucket-primary-900: #1e3a8a;
+    --color-primary-50: #eff6ff;
+    --color-primary-500: #3b82f6;
+    --color-primary-600: #2563eb;
+    --color-primary-700: #1d4ed8;
+    --color-primary-900: #1e3a8a;
 
-    --color-bucket-secondary-50: #fffbeb;
-    --color-bucket-secondary-500: #f59e0b;
-    --color-bucket-secondary-600: #d97706;
-    --color-bucket-secondary-700: #b45309;
+    --color-secondary-50: #fffbeb;
+    --color-secondary-500: #f59e0b;
+    --color-secondary-600: #d97706;
+    --color-secondary-700: #b45309;
 
-    --color-bucket-success-50: #ecfdf5;
-    --color-bucket-success-500: #10b981;
-    --color-bucket-success-600: #059669;
-    --color-bucket-success-700: #047857;
+    --color-success-50: #ecfdf5;
+    --color-success-500: #10b981;
+    --color-success-600: #059669;
+    --color-success-700: #047857;
 
-    --color-bucket-neutral-50: #f8fafc;
-    --color-bucket-neutral-100: #f1f5f9;
-    --color-bucket-neutral-600: #475569;
-    --color-bucket-neutral-700: #334155;
-    --color-bucket-neutral-900: #0f172a;
+    --color-neutral-50: #f8fafc;
+    --color-neutral-100: #f1f5f9;
+    --color-neutral-600: #475569;
+    --color-neutral-700: #334155;
+    --color-neutral-900: #0f172a;
 }
 
 @layer base {
     /* Styles globaux */
     body {
-        @apply bg-bucket-neutral-50 text-bucket-neutral-900;
+        @apply bg-neutral-50 text-neutral-900;
     }
 }
 
 @layer components {
     /* === HEADER === */
     header {
-        @apply bg-white z-50 sticky top-0 shadow-sm border-b border-bucket-neutral-100 p-4 flex items-center justify-between;
+        @apply bg-white z-50 sticky top-0 shadow-sm border-b border-neutral-100 p-4 flex items-center justify-between;
     }
 
     .logo {
@@ -44,31 +44,31 @@
     }
 
     .logo h1 {
-        @apply text-2xl font-bold text-bucket-primary-600;
+        @apply text-2xl font-bold text-primary-600;
     }
 
     /* === NAVIGATION === */
     nav a {
-        @apply text-bucket-neutral-700 hover:text-bucket-primary-600 font-medium transition-colors;
+        @apply text-neutral-700 hover:text-primary-600 font-medium transition-colors;
     }
 
     /* === FOOTER === */
     footer {
-        @apply fixed bottom-0 left-0 bg-bucket-neutral-900 text-white w-full text-center py-3 text-sm;
+        @apply fixed bottom-0 left-0 bg-neutral-900 text-white w-full text-center py-3 text-sm;
     }
 
     .wishCard {
-        @apply mx-auto sm:w-2/3 w-full grid p-2 rounded border-gray-200 border shadow my-2 scroll-mt-30;
+        @apply mx-auto sm:w-2/3 w-full grid p-2 rounded border-gray-200 border shadow my-2 scroll-mt-30 min-h-40;
     }
 }
 
 @layer utilities {
     .btn-primary {
-        @apply bg-bucket-primary-600 px-2 py-1 rounded shadow-sm text-white cursor-pointer
+        @apply bg-primary-600 px-2 py-1 rounded shadow-sm text-white cursor-pointer
     }
 
     .btn-secondary {
-        @apply bg-bucket-secondary-600 px-2 py-1 rounded shadow-sm text-white cursor-pointer
+        @apply bg-secondary-600 px-2 py-1 rounded shadow-sm text-white cursor-pointer
     }
 
     .btn-danger {

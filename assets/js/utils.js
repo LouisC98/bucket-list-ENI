@@ -32,10 +32,11 @@ function getNotificationContainer() {
     return container;
 }
 
-const mobileMenu = document.getElementById('mobileMenu');
-const burgerImg = document.getElementById('burgerImg');
-const crossImg = document.getElementById('crossImg');
 function toggleMenu() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    const burgerImg = document.getElementById('burgerImg');
+    const crossImg = document.getElementById('crossImg');
+
     mobileMenu.classList.toggle('hidden');
     burgerImg.classList.toggle('hidden');
     crossImg.classList.toggle('hidden');

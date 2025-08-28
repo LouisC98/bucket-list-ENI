@@ -17,8 +17,6 @@ document.addEventListener('turbo:load', function() {
         if (completeCheckbox.checked) status = true;
         else if (incompleteCheckbox.checked) status = false;
 
-        console.log(userId)
-
         fetch(`${searchUrl}?search=${encodeURIComponent(searchValue)}&sort=${sortValue}&status=${status}&userId=${userId}`, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'

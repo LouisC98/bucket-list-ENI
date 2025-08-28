@@ -15,20 +15,27 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/wish')]
 final class WishController extends AbstractController
 {
     #[Route('/user/{id}', name: 'app_wish_user', requirements: ['id'=>'\d+'], methods: ['GET'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function userWishes(int $id, Request $request, WishSearchService $searchService, UserRepository $userRepository): Response
     {
         $currentUser = $this->getUser();
-        $targetUser = $userRepository->find($id);
+        if (!$currentUser) {
+            $this->addFlash('error', 'Veuillez vous connecter');
+            return $this->redirectToRoute('app_login');
+        }
 
-        if (!$targetUser || !$currentUser) {
+        $targetUser = $userRepository->find($id);
+        if (!$targetUser) {
             $this->addFlash('error', 'Utilisateur non trouvé');
             return $this->redirectToRoute('app_home');
         }
+
 
         $isOwner = $currentUser->getId() === $targetUser->getId();
         $showOnlyPublished = !$isOwner;
@@ -49,13 +56,16 @@ final class WishController extends AbstractController
     }
 
     #[Route('/new', name: 'app_wish_new', methods: ['GET', 'POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $wish = new Wish();
+        $user = $this->getUser();
         $form = $this->createForm(WishType::class, $wish);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $wish->setAuthor($user);
             $entityManager->persist($wish);
             $entityManager->flush();
             $this->addFlash('success', 'Wish crée ! ✅');
@@ -75,13 +85,14 @@ final class WishController extends AbstractController
         $wish = $wishRepository->find($id);
         if (!$wish) {
             $this->addFlash('error', 'Wish non trouvé ❌');
-            return $this->redirectToRoute('app_wish_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
         return $this->render('wish/show.html.twig', [
             'wish' => $wish,
         ]);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/{id}/edit', name: 'app_wish_edit', requirements: ['id'=>'\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id, WishRepository $wishRepository, EntityManagerInterface $entityManager): Response
     {
@@ -90,6 +101,13 @@ final class WishController extends AbstractController
             $this->addFlash('error', 'Wish non trouvé ❌');
             return $this->redirectToRoute('app_wish_index', [], Response::HTTP_SEE_OTHER);
         }
+
+        $user = $this->getUser();
+        if ($wish->getAuthor() !== $user) {
+            $this->addFlash('error', 'Vous n\'êtes pas le propriétaire');
+            return $this->redirectToRoute('app_wish_user', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+        }
+
         $form = $this->createForm(WishType::class, $wish);
         $form->handleRequest($request);
 
@@ -106,6 +124,7 @@ final class WishController extends AbstractController
         ]);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/{id}/status', name: 'app_wish_status', requirements: ['id'=>'\d+'], methods: ['PATCH'])]
     public function changeWishStatus(int $id, WishRepository $wishRepository, EntityManagerInterface $entityManager): Response
     {
@@ -114,6 +133,12 @@ final class WishController extends AbstractController
             if (!$wish) {
                 return new JsonResponse(['error' => true, 'message' => 'Wish non trouvé ❌']);
             }
+
+            $user = $this->getUser();
+            if ($wish->getAuthor() !== $user) {
+                return new JsonResponse(['error' => true, 'message' => 'Vous n\'êtes pas le propriétaire ❌']);
+            }
+
             $wish->setIsCompleted(!$wish->isCompleted());
             $entityManager->flush();
             return new JsonResponse(['success' => true, 'isCompleted' => $wish->isCompleted()]);
@@ -122,6 +147,7 @@ final class WishController extends AbstractController
         }
     }
 
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/{id}', name: 'app_wish_delete', requirements: ['id'=>'\d+'], methods: ['POST'])]
     public function delete(Request $request, Wish $wish, EntityManagerInterface $entityManager): Response
     {

@@ -16,8 +16,8 @@ class WishFixtures extends Fixture
 
         for ($i = 0; $i < 20; $i++) {
             $wish = new Wish();
-            $wish->setTitle($faker->sentence(6, true));
-            $wish->setDescription($faker->optional(0.8)->paragraph(3));
+            $wish->setTitle($faker->realText(50));
+            $wish->setDescription($faker->realText(255));
             $wish->setIsPublished($faker->boolean(70));
             $wish->setIsCompleted($faker->boolean(20));
 

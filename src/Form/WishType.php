@@ -21,11 +21,9 @@ class WishType extends AbstractType
             ->add('description', TextareaType::class, [
                 'label' => "Description"
             ])
-            ->add('author', TextType::class, [
-                'label' => "Auteur"
-            ])
             ->add('isPublished', CheckboxType::class, [
-                'label' => "Publier"
+                'label' => "Publier",
+                'required' => false
             ])
         ;
     }
