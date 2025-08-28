@@ -119,14 +119,18 @@ final class WishController extends AbstractController
     }
 
     #[Route('/{id}/status', name: 'app_wish_status', requirements: ['id'=>'\d+'], methods: ['PATCH'])]
-    public function changeWishStatus(Wish $wish, EntityManagerInterface $entityManager): Response
+    public function changeWishStatus(int $id, WishRepository $wishRepository, EntityManagerInterface $entityManager): Response
     {
         try {
+            $wish = $wishRepository->find($id);
+            if (!$wish) {
+                return new JsonResponse(['error' => true, 'message' => 'Wish non trouvé ❌']);
+            }
             $wish->setIsCompleted(!$wish->isCompleted());
             $entityManager->flush();
-            return new JsonResponse(['isCompleted' => $wish->isCompleted()]);
+            return new JsonResponse(['success' => true, 'isCompleted' => $wish->isCompleted()]);
         } catch (\Exception $e) {
-            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['error' => true, 'message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

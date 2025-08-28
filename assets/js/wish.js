@@ -59,15 +59,29 @@ document.addEventListener('turbo:load', function() {
             if (e.target.hasAttribute('data-wish-url')) {
                 const btn = e.target;
                 fetch(btn.dataset.wishUrl, { method: 'PATCH' })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.isCompleted) {
-                            btn.textContent = '✅';
-                            showNotification('Wish réalisé ! ✅', 'success');
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json()
                         } else {
-                            btn.textContent = '❌';
-                            showNotification('Wish annulé ! ❌', 'error');
+                            throw new Error('Erreur serveur');
                         }
+                    })
+                    .then(data => {
+                        if (data.error) {
+                            throw new Error(data.message);
+                        } else if (data.success) {
+                            if (data.isCompleted) {
+                                btn.textContent = '✅';
+                                showNotification('Wish réalisé ! ✅', 'success');
+                            } else {
+                                btn.textContent = '❌';
+                                showNotification('Wish annulé ! ❌', 'error');
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        showNotification(error.message, 'error')
                     });
             }
         });

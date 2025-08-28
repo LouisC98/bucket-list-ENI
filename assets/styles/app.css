@@ -36,7 +36,7 @@
 @layer components {
     /* === HEADER === */
     header {
-        @apply bg-white sticky top-0 shadow-sm border-b border-bucket-neutral-100 p-4 flex items-center justify-between;
+        @apply bg-white z-50 sticky top-0 shadow-sm border-b border-bucket-neutral-100 p-4 flex items-center justify-between;
     }
 
     .logo {

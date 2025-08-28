@@ -25,7 +25,8 @@ class UserFixtures extends Fixture
             $user = new User();
             $user->setEmail($faker->email());
             $user->setFirstName($faker->firstName());
-            $user->setName($faker->lastName());
+            $user->setLastName($faker->lastName());
+            $user->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeThisDecade()));
 
             $hashedPassword = $this->passwordHasher->hashPassword($user, 'password123');
             $user->setPassword($hashedPassword);
