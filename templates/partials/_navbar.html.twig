@@ -5,29 +5,30 @@
             <h1 class="text-xl mx-1">Bucket List</h1>
         </a>
     </div>
-    <button onclick="toggleMenu()" class="md:hidden cursor-pointer">
+    <button id="burgerBtn" class="md:hidden cursor-pointer">
         <img src="{{ asset('/images/burger.svg') }}" alt="burger btn" id="burgerImg" class="w-8">
         <img src="{{ asset('/images/cross.svg') }}" alt="cross btn" id="crossImg" class="w-8 hidden">
     </button>
-    <nav id="mobileMenu" class="absolute left-0 top-full w-full bg-white shadow-md hidden" aria-label="Menu navigation">
+    <nav id="mobileMenu" class="absolute left-0 top-full w-full bg-white shadow-md hidden z-100" aria-label="Menu navigation mobile">
         <a href="{{ path('app_home') }}" class="block p-2">Accueil</a>
         <a href="{{ path('app_wish_new') }}" class="block p-2">Nouveau souhait</a>
         <a href="{{ path('app_about') }}" class="block p-2">À propos</a>
+        {% if app.user %}
+            <a href="{{ path('app_logout') }}" class="block p-2">Se déconnecter</a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="block p-2">Se connecter</a>
+            <a href="{{ path('app_register') }}" class="block p-2">S'inscrire</a>
+        {% endif %}
     </nav>
-    <nav class="hidden md:flex gap-3" aria-label="Menu navigation">
+    <nav class="hidden md:flex gap-3" aria-label="Menu navigation desktop">
         <a href="{{ path('app_home') }}">Accueil</a>
         <a href="{{ path('app_wish_new') }}">Nouveau souhait</a>
         <a href="{{ path('app_about') }}">À propos</a>
+        {% if app.user %}
+            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+        {% else %}
+            <a href="{{ path('app_login') }}">Se connecter</a>
+            <a href="{{ path('app_register') }}">S'inscrire</a>
+        {% endif %}
     </nav>
 </header>
-<script>
-    function toggleMenu() {
-        const mobileMenu = document.getElementById('mobileMenu');
-        const burgerImg = document.getElementById('burgerImg');
-        const crossImg = document.getElementById('crossImg');
-
-        mobileMenu.classList.toggle('hidden');
-        burgerImg.classList.toggle('hidden');
-        crossImg.classList.toggle('hidden');
-    }
-</script>

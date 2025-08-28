@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <section class="mx-auto p-2 w-full">
+
+        {{ form_start(registrationForm) }}
+        <div class="mt-5 mx-auto grid gap-3 py-2 px-4 rounded border border-gray-200 shadow-md sm:w-2/3 md:w-1/3">
+            <h1 class="text-xl text-center font-semibold mb-3">S'inscrire</h1>
+            <div class="grid">
+                {{ form_label(registrationForm.email, 'Email', {'label_attr': {'class': 'font-semibold text-gray-700'}}) }}
+                {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control border rounded p-1'}}) }}
+                <div class="text-red-500 font-semibold text-end text-sm">
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+            </div>
+
+            <div class="grid">
+                {{ form_label(registrationForm.firstName, 'Prénom', {'label_attr': {'class': 'font-semibold text-gray-700'}}) }}
+                {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control border rounded p-1'}}) }}
+                <div class="text-red-500 font-semibold text-end text-sm">
+                    {{ form_errors(registrationForm.firstName) }}
+                </div>
+            </div>
+            <div class="grid">
+                {{ form_label(registrationForm.lastName, 'Nom', {'label_attr': {'class': 'font-semibold text-gray-700'}}) }}
+                {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control border rounded p-1'}}) }}
+                <div class="text-red-500 font-semibold text-end text-sm">
+                    {{ form_errors(registrationForm.lastName) }}
+                </div>
+            </div>
+            <div class="grid">
+                {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'font-semibold text-gray-700'}}) }}
+                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control border rounded p-1'}}) }}
+                <div class="text-red-500 font-semibold text-end text-sm">
+                    {{ form_errors(registrationForm.plainPassword) }}
+                </div>
+            </div>
+            <div class="flex gap-2 justify-center items-center">
+                <button type="submit" class="btn-primary">S'inscrire</button>
+                <a href="{{ path('app_login') }}" class="underline text-bucket-primary-600">Se connecter</a>
+            </div>
+        </div>
+        {{ form_end(registrationForm) }}
+
+    </section>
+
+{% endblock %}

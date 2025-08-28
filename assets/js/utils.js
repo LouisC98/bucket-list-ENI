@@ -26,13 +26,23 @@ function getNotificationContainer() {
     if (!container) {
         container = document.createElement('div');
         container.id = 'notification-container';
-        container.className = 'absolute right-3 top-25 z-50 flex flex-col gap-2';
+        container.className = 'fixed right-3 top-25 z-50 flex flex-col gap-2';
         document.body.appendChild(container);
     }
     return container;
 }
 
+const mobileMenu = document.getElementById('mobileMenu');
+const burgerImg = document.getElementById('burgerImg');
+const crossImg = document.getElementById('crossImg');
+function toggleMenu() {
+    mobileMenu.classList.toggle('hidden');
+    burgerImg.classList.toggle('hidden');
+    crossImg.classList.toggle('hidden');
+}
+
 document.addEventListener('turbo:load', () => {
+
     const flashMessages = document.querySelectorAll('.flash-message');
     flashMessages.forEach((flashMessage) => {
         if (flashMessage.dataset.status !== 'error') {
@@ -41,4 +51,7 @@ document.addEventListener('turbo:load', () => {
             }, 5000);
         }
     });
+
+    const burgerBtn = document.getElementById('burgerBtn')
+    burgerBtn.addEventListener('click', toggleMenu);
 });

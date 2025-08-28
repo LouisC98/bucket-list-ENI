@@ -9,7 +9,7 @@
             <a href="{{ path('app_wish_new') }}" class="btn-primary p-3">Nouveau souhait</a>
         </div>
 
-        <div class="text-center my-6 flex justify-center items-center gap-4">
+        <div class="text-center my-6 flex justify-center items-center gap-4 flex-wrap">
             <div>
                 <label for="searchInput" class="me-2">Rechercher</label>
                 <input type="text" id="searchInput" class="p-1 border rounded" value="{{ app.request.query.get('search') }}" data-search-url="{{ path('app_wish_index') }}">
@@ -17,7 +17,7 @@
             <div>
                 <label for="sortSelect" class="me-2">Trier par</label>
                 <select id="sortSelect" class="p-1 border rounded">
-                    <option value="" {{ app.request.query.get('sort') is empty ? 'selected' : '' }}>-- Trier --</option>
+                    <option value="" {{ app.request.query.get('sort') is empty ? 'selected' : '' }} class="text-center">-- Tri --</option>
                     <option value="newest" {{ app.request.query.get('sort') == 'newest' ? 'selected' : '' }}>Plus récents</option>
                     <option value="oldest" {{ app.request.query.get('sort') == 'oldest' ? 'selected' : '' }}>Plus anciens</option>
                 </select>
