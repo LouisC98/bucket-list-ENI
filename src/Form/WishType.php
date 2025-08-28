@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Wish;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,6 +23,9 @@ class WishType extends AbstractType
             ])
             ->add('author', TextType::class, [
                 'label' => "Auteur"
+            ])
+            ->add('isPublished', CheckboxType::class, [
+                'label' => "Publier"
             ])
         ;
     }

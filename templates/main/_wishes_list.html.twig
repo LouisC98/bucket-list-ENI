@@ -24,7 +24,11 @@
         <p class="my-2">{{ wish.description }}</p>
         <div class="flex justify-between">
             <em>{{ wish.author }}</em>
-            <span class="mt-auto">{{ wish.createdAt|date('d/m/Y') }}</span>
+            <div>
+                <em class="text-gray-500">{{ wish.isPublished ? 'Public' : 'Privé'}}</em>
+                -
+                <span>{{ wish.createdAt|date('d/m/Y') }}</span>
+            </div>
         </div>
     </div>
 {% else %}
