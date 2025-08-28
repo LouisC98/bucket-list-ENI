@@ -1,6 +1,8 @@
 import {showNotification} from './utils.js';
 
 document.addEventListener('turbo:load', function() {
+
+    // RECHERCHE WISH
     const searchInput = document.getElementById('searchInput');
     const sortSelect = document.getElementById('sortSelect');
     const wishesContainer = document.getElementById('wishesContainer');
@@ -51,6 +53,7 @@ document.addEventListener('turbo:load', function() {
         });
     }
 
+    // COMPLETE A WISH
     const containers = [
         wishesContainer,
         document.getElementById('changeWishStatus')

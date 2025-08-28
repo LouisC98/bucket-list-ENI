@@ -108,12 +108,25 @@ final class WishController extends AbstractController
             return $this->redirectToRoute('app_wish_user', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
 
+        $isPublishedBefore = $wish->isPublished();
+
         $form = $this->createForm(WishType::class, $wish);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-            $this->addFlash('success', 'Wish modifié ! ✅');
+
+            $isPublishedAfter = $wish->isPublished();
+
+            if ($isPublishedBefore !== $isPublishedAfter) {
+                if ($isPublishedAfter) {
+                    $this->addFlash('success', 'Wish publié ! ✅');
+                } else {
+                    $this->addFlash('error', 'Wish privé ! 📝');
+                }
+            } else {
+                $this->addFlash('success', 'Wish modifié ! ✅');
+            }
 
             return $this->redirectToRoute('app_wish_show', ['id' => $wish->getId()], Response::HTTP_SEE_OTHER);
         }
