@@ -2,20 +2,14 @@
     <div class="wishCard" id="wish-{{ wish.id }}" >
         <div class="flex justify-between items-center gap-2">
             <a href="{{ path('app_wish_show', { id: wish.id}) }}" class="flex-grow">
-                <h2 class="text-2xl font-semibold hover:text-primary-700">
+                <h2 class="wishCardTitle">
                     {{ wish.title }}
                 </h2>
             </a>
 
-{#            <form method="post" action="{{ path('app_wish_status', {id: wish.id}) }}" style="display: flex;" data-turbo="false">#}
-{#                <input type="hidden" name="_token" value="{{ csrf_token('status' ~ wish.id) }}">#}
-{#                <button type="submit" class="cursor-pointer text-xl" title="Changer le statut">#}
-{#                    {{ wish.isCompleted ? '✅' : '❌' }}#}
-{#                </button>#}
-{#            </form>#}
             {% if app.user is same as(wish.author) %}
                 <button
-                        class="cursor-pointer text-2xl"
+                        class="cursor-pointer text-2xl hover:text-shadow-md hover:scale-110"
                         data-wish-url="{{ path('app_wish_status', {id: wish.id}) }}"
                         title="Changer le statut">
                     {{ wish.isCompleted ? '✅' : '❌' }}
@@ -26,7 +20,16 @@
                 </div>
             {% endif %}
         </div>
-        <p class="my-2">{{ wish.description }}</p>
+        <div class="relative my-2 max-h-24 overflow-hidden">
+            <p>
+                {{ wish.description|slice(0, 255) }}{{ wish.description|length > 255 ? ' ...' : ''}}
+            </p>
+            {% if wish.description|length > 255 %}
+                <div class="absolute bottom-0 left-0 w-full h-4
+                    bg-gradient-to-t from-white to-transparent">
+                </div>
+            {% endif %}
+        </div>
         <div class="flex justify-between items-end">
             <a href="{{ path('app_wish_user', { id: wish.author.id }) }}">
                 <em class="font-medium text-gray-600 hover:text-primary-500">{{ wish.author.firstName }} {{ wish.author.lastName }}</em>
@@ -43,3 +46,31 @@
         <p class="text-center">Pas de souhait</p>
     </div>
 {% endfor %}
+
+{# PAGINATION #}
+{% if wishes|length > 0 %}
+    <div class="flex justify-center gap-4 mt-6">
+        {% set currentOffset = app.request.query.getInt('offset', 0) %}
+        {% set previous = currentOffset - 6 %}
+        {% set next = currentOffset + 6 %}
+
+        {# Récupérer tous les paramètres actuels #}
+        {% set currentParams = app.request.query.all %}
+
+        {% if previous >= 0 %}
+            {% set previousParams = currentParams|merge({'offset': previous}) %}
+            <a href="?{{ previousParams|url_encode }}"
+               class="bg-blue-500 text-white px-4 py-2 rounded">Précédent</a>
+        {% endif %}
+
+        {% if next < wishes|length %}
+            {% set nextParams = currentParams|merge({'offset': next}) %}
+            <a href="?{{ nextParams|url_encode }}"
+               class="bg-blue-500 text-white px-4 py-2 rounded">Suivant</a>
+        {% endif %}
+    </div>
+
+    <div class="text-center mt-2">
+        <small>Affichage de {{ currentOffset + 1 }} à {{ min(currentOffset + 6, wishes|length) }} sur {{ wishes|length }} souhaits</small>
+    </div>
+{% endif %}

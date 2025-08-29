@@ -14,10 +14,10 @@ class WishFixtures extends Fixture
     {
         $faker = Factory::create("fr_FR");
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             $wish = new Wish();
             $wish->setTitle($faker->realText(50));
-            $wish->setDescription($faker->realText(255));
+            $wish->setDescription($faker->realText(500));
             $wish->setIsPublished($faker->boolean(70));
             $wish->setIsCompleted($faker->boolean(20));
 

@@ -36,20 +36,20 @@ final class WishController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-
         $isOwner = $currentUser->getId() === $targetUser->getId();
         $showOnlyPublished = !$isOwner;
 
-        $wishes = $searchService->searchFromRequest($request, $showOnlyPublished, $targetUser->getId());
+        $offset = max(0, $request->query->getInt('offset'));
+        $paginator = $searchService->searchFromRequestPaginated($request, $showOnlyPublished, $targetUser->getId(), $offset);
 
         if ($request->isXmlHttpRequest()) {
             return $this->render('partials/_wishes_list.html.twig', [
-                'wishes' => $wishes,
+                'wishes' => $paginator,
             ]);
         }
 
         return $this->render('wish/index.html.twig', [
-            'wishes' => $wishes,
+            'wishes' => $paginator,
             'isOwner' => $isOwner,
             'user' => $targetUser
         ]);

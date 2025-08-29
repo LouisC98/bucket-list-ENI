@@ -14,16 +14,17 @@ final class MainController extends AbstractController
     #[Route('/', name: 'app_home', methods: ['GET'])]
     public function home(Request $request, WishSearchService $searchService): Response
     {
-        $wishes = $searchService->searchFromRequest($request);
+        $offset = max(0, $request->query->getInt('offset'));
+        $paginator = $searchService->searchFromRequestPaginated($request, true, null, $offset);
 
         if ($request->isXmlHttpRequest()) {
             return $this->render('partials/_wishes_list.html.twig', [
-                'wishes' => $wishes,
+                'wishes' => $paginator,
             ]);
         }
 
         return $this->render('main/index.html.twig', [
-            'wishes' => $wishes,
+            'wishes' => $paginator,
         ]);
     }
 

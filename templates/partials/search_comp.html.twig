@@ -8,18 +8,21 @@
     <div>
         <label for="sortSelect" class="me-2">Trier par</label>
         <select id="sortSelect" class="p-1 border rounded">
-            <option value="" {{ app.request.query.get('sort') is empty ? 'selected' : '' }} class="text-center">-- Tri --</option>
-            <option value="newest" {{ app.request.query.get('sort') == 'newest' or orderByDESC is defined ? 'selected' : '' }}>Plus récents</option>
-            <option value="oldest" {{ app.request.query.get('sort') == 'oldest' ? 'selected' : '' }}>Plus anciens</option>
+            <option value="DESC" {{ app.request.query.get('sort') == 'DESC' ? 'selected' : '' }}>Plus récents</option>
+            <option value="ASC" {{ app.request.query.get('sort') == 'ASC' ? 'selected' : '' }}>Plus anciens</option>
         </select>
     </div>
     <div class="flex gap-3 items-center">
         <label for="complete" class="cursor-pointer">Complété
-            <input type="checkbox" name="complete" id="complete" class="transform scale-150 accent-green-500 ms-2 cursor-pointer">
+            <input type="checkbox" name="complete" id="complete"
+                   class="transform scale-150 accent-green-500 ms-2 cursor-pointer"
+                    {{ app.request.query.get('status') == 'true' or app.request.query.get('status') == '1' ? 'checked' : '' }}>
         </label>
 
         <label for="incomplete" class="cursor-pointer">Incomplet
-            <input type="checkbox" name="incomplete" id="incomplete" class="transform scale-150 accent-red-500 ms-2 cursor-pointer">
+            <input type="checkbox" name="incomplete" id="incomplete"
+                   class="transform scale-150 accent-red-500 ms-2 cursor-pointer"
+                    {{ app.request.query.get('status') == 'false' or app.request.query.get('status') == '0' ? 'checked' : '' }}>
         </label>
     </div>
     {% if user is defined and user %}

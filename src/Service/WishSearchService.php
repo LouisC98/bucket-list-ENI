@@ -11,28 +11,27 @@ class WishSearchService
         private WishRepository $wishRepository
     ) {}
 
-    public function searchFromRequest(Request $request, bool $showOnlyPublished = true, ?int $userId = null): array
+    public function searchFromRequestPaginated(Request $request, bool $showOnlyPublished = true, ?int $userId = null, int $offset = 0)
     {
         $criteria = $this->parseSearchCriteria($request, $userId);
 
-        return $this->wishRepository->findByCriteria(
+        return $this->wishRepository->getWishPaginator(
             $criteria['search'],
             $criteria['orderBy'],
             $criteria['isCompleted'],
             $showOnlyPublished,
-            $userId
+            $userId,
+            $offset
         );
     }
-
     private function parseSearchCriteria(Request $request, int $userId = null): array
     {
         $searchInput = $request->query->getString('search');
 
         $sort = $request->query->getString('sort');
         $orderBy = [];
-        if ($sort) {
-            $order = $sort === 'oldest' ? 'ASC' : 'DESC';
-            $orderBy = ['createdAt' => $order];
+        if ($sort && in_array($sort, ['ASC', 'DESC'])) {
+            $orderBy = ['createdAt' => $sort];
         } elseif ($userId !== null) {
             $orderBy = ['createdAt' => 'DESC'];
         }

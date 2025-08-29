@@ -4,21 +4,21 @@ namespace App\Repository;
 
 use App\Entity\Wish;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
-use Nette\Utils\Paginator;
-use function Webmozart\Assert\Tests\StaticAnalysis\null;
 
 /**
  * @extends ServiceEntityRepository<Wish>
  */
 class WishRepository extends ServiceEntityRepository
 {
+    public const WISHES_PER_PAGE = 6;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Wish::class);
     }
 
-    public function findByCriteria(string $search = "", array $orderBy = [], bool $isCompleted = null, bool $isPublished = true, int $userId = null): array
+    public function getWishPaginator(string $search = "", array $orderBy = [], bool $isCompleted = null, bool $isPublished = true, int $userId = null, int $offset = 0): Paginator
     {
         $qb = $this->createQueryBuilder('w');
 
@@ -47,16 +47,17 @@ class WishRepository extends ServiceEntityRepository
         }
 
         if (empty($orderBy)) {
-            $qb->orderBy('RAND()');
+            $qb->orderBy('w.createdAt', 'DESC');
         } else {
             foreach ($orderBy as $field => $direction) {
                 $qb->addOrderBy('w.'.$field, $direction);
             }
         }
 
-        return $qb->getQuery()
-            ->getResult()
-        ;
+        $qb->setMaxResults(self::WISHES_PER_PAGE)
+            ->setFirstResult($offset);
+
+        return new Paginator($qb->getQuery());
     }
 
 //    public function findAllWithLimit(int $limit = 10, int $offset = 0, ?string $search = null): array

@@ -16,7 +16,7 @@
             {% if app.user is same as(wish.author) %}
                 <button
                         id="changeWishStatus"
-                        class="cursor-pointer text-2xl"
+                        class="cursor-pointer text-2xl hover:text-shadow-md hover:scale-110"
                         {#                    data-wish-id="{{ wish.id }}"#}
                         data-wish-url="{{ path('app_wish_status', {id: wish.id}) }}"
                         title="Changer le statut">
