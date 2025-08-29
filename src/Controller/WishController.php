@@ -6,6 +6,7 @@ use App\Entity\Wish;
 use App\Form\WishType;
 use App\Repository\UserRepository;
 use App\Repository\WishRepository;
+use App\Service\PaginationService;
 use App\Service\WishSearchService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +23,7 @@ final class WishController extends AbstractController
 {
     #[Route('/user/{id}', name: 'app_wish_user', requirements: ['id'=>'\d+'], methods: ['GET'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function userWishes(int $id, Request $request, WishSearchService $searchService, UserRepository $userRepository): Response
+    public function userWishes(int $id, Request $request, WishSearchService $searchService, UserRepository $userRepository, PaginationService $paginationService): Response
     {
         $currentUser = $this->getUser();
         if (!$currentUser) {
@@ -42,16 +43,24 @@ final class WishController extends AbstractController
         $offset = max(0, $request->query->getInt('offset'));
         $paginator = $searchService->searchFromRequestPaginated($request, $showOnlyPublished, $targetUser->getId(), $offset);
 
+        $paginationData = $paginationService->createPaginationData(
+            $paginator,
+            $request,
+            WishRepository::WISHES_PER_PAGE
+        );
+
         if ($request->isXmlHttpRequest()) {
             return $this->render('partials/_wishes_list.html.twig', [
                 'wishes' => $paginator,
+                'pagination' => $paginationData
             ]);
         }
 
         return $this->render('wish/index.html.twig', [
             'wishes' => $paginator,
             'isOwner' => $isOwner,
-            'user' => $targetUser
+            'user' => $targetUser,
+            'pagination' => $paginationData
         ]);
     }
 

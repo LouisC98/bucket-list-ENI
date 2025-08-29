@@ -1,0 +1,30 @@
+{% if pagination.total > 0 %}
+    <nav class="flex flex-col items-center gap-4 mt-6" aria-label="Pagination">
+        <div class="flex justify-center gap-4">
+            {% if pagination.hasPrevious %}
+                {% set previousParams = pagination.currentParams|merge({'offset': pagination.previousOffset}) %}
+                <a href="?{{ previousParams|url_encode }}"
+                   class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+                    ← Précédent
+                </a>
+            {% endif %}
+
+            <span class="flex items-center px-4 py-2 text-gray-600 bg-gray-100 rounded">
+                Page {{ pagination.currentPage }} sur {{ pagination.totalPages }}
+            </span>
+
+            {% if pagination.hasNext %}
+                {% set nextParams = pagination.currentParams|merge({'offset': pagination.nextOffset}) %}
+                <a href="?{{ nextParams|url_encode }}"
+                   class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+                    Suivant →
+                </a>
+            {% endif %}
+        </div>
+        <div class="text-center">
+            <small class="text-gray-500">
+                {{ pagination.total }} souhaits
+            </small>
+        </div>
+    </nav>
+{% endif %}

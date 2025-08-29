@@ -47,30 +47,4 @@
     </div>
 {% endfor %}
 
-{# PAGINATION #}
-{% if wishes|length > 0 %}
-    <div class="flex justify-center gap-4 mt-6">
-        {% set currentOffset = app.request.query.getInt('offset', 0) %}
-        {% set previous = currentOffset - 6 %}
-        {% set next = currentOffset + 6 %}
-
-        {# Récupérer tous les paramètres actuels #}
-        {% set currentParams = app.request.query.all %}
-
-        {% if previous >= 0 %}
-            {% set previousParams = currentParams|merge({'offset': previous}) %}
-            <a href="?{{ previousParams|url_encode }}"
-               class="bg-blue-500 text-white px-4 py-2 rounded">Précédent</a>
-        {% endif %}
-
-        {% if next < wishes|length %}
-            {% set nextParams = currentParams|merge({'offset': next}) %}
-            <a href="?{{ nextParams|url_encode }}"
-               class="bg-blue-500 text-white px-4 py-2 rounded">Suivant</a>
-        {% endif %}
-    </div>
-
-    <div class="text-center mt-2">
-        <small>Affichage de {{ currentOffset + 1 }} à {{ min(currentOffset + 6, wishes|length) }} sur {{ wishes|length }} souhaits</small>
-    </div>
-{% endif %}
+{% include 'partials/_pagination.html.twig' %}
