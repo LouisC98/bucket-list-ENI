@@ -70,6 +70,14 @@
         @apply text-neutral-700 hover:text-primary-600 hover:text-shadow-md hover:scale-105 font-medium transition-colors;
     }
 
+    #mobileMenu a {
+        @apply hover:scale-100;
+    }
+
+    #burgerBtn  {
+        @apply hover:scale-110;
+    }
+
     /* === FOOTER === */
     footer {
         @apply fixed bottom-0 left-0 bg-neutral-900 text-white w-full text-center py-3 text-sm;
