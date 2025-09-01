@@ -18,7 +18,7 @@ class WishRepository extends ServiceEntityRepository
         parent::__construct($registry, Wish::class);
     }
 
-    public function getWishPaginator(string $search = "", array $orderBy = [], bool $isCompleted = null, bool $isPublished = true, int $userId = null, int $offset = 0): Paginator
+    public function getWishPaginator(string $search = "", array $orderBy = [], bool $isCompleted = null, int $categoryId = null, bool $isPublished = true, int $userId = null, int $offset = 0): Paginator
     {
         $qb = $this->createQueryBuilder('w');
 
@@ -44,6 +44,11 @@ class WishRepository extends ServiceEntityRepository
         if ($userId !== null) {
             $qb->andWhere('w.author = :userId');
             $qb->setParameter('userId', $userId);
+        }
+
+        if ($categoryId !== null) {
+            $qb->andWhere('w.category = :categoryId');
+            $qb->setParameter('categoryId', $categoryId);
         }
 
         if (empty($orderBy)) {

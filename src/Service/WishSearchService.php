@@ -20,6 +20,7 @@ readonly class WishSearchService
             $criteria['search'],
             $criteria['orderBy'],
             $criteria['isCompleted'],
+            $criteria['categoryId'],
             $showOnlyPublished,
             $userId,
             $offset
@@ -31,7 +32,7 @@ readonly class WishSearchService
 
         $sort = $request->query->getString('sort');
         $orderBy = [];
-        if ($sort && in_array($sort, ['ASC', 'DESC'])) {
+        if (in_array($sort, ['ASC', 'DESC'])) {
             $orderBy = ['createdAt' => $sort];
         } elseif ($userId !== null) {
             $orderBy = ['createdAt' => 'DESC'];
@@ -45,10 +46,17 @@ readonly class WishSearchService
             $isCompleted = false;
         }
 
+        $categoryId = null;
+        $categoryIdParam = $request->query->getInt('categoryId');
+        if ($categoryIdParam) {
+            $categoryId = $categoryIdParam;
+        }
+
         return [
             'search' => $searchInput,
             'orderBy' => $orderBy,
-            'isCompleted' => $isCompleted
+            'isCompleted' => $isCompleted,
+            'categoryId' => $categoryId,
         ];
     }
 }

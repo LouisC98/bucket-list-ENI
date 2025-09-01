@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\CategoryRepository;
 use App\Repository\WishRepository;
 use App\Service\PaginationService;
 use App\Service\WishSearchService;
@@ -13,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class MainController extends AbstractController
 {
     #[Route('/', name: 'app_home', methods: ['GET'])]
-    public function home(Request $request, WishSearchService $searchService, PaginationService $paginationService): Response
+    public function home(Request $request, WishSearchService $searchService, PaginationService $paginationService, CategoryRepository $categoryRepository): Response
     {
         $offset = max(0, $request->query->getInt('offset'));
         $paginator = $searchService->searchFromRequestPaginated($request, true, null, $offset);
@@ -33,7 +34,8 @@ final class MainController extends AbstractController
 
         return $this->render('main/index.html.twig', [
             'wishes' => $paginator,
-            'pagination' => $paginationData
+            'pagination' => $paginationData,
+            'categories' => $categoryRepository->findAll(),
         ]);
     }
 

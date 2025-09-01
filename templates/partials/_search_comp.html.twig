@@ -12,6 +12,15 @@
             <option value="ASC" {{ app.request.query.get('sort') == 'ASC' ? 'selected' : '' }}>Plus anciens</option>
         </select>
     </div>
+    <div>
+        <label for="categorySelect" class="me-2">Catégorie</label>
+        <select id="categorySelect" class="p-1 border rounded">
+            <option>-- Sélectionnez une catégorie--</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
     <div class="flex gap-3 items-center">
         <label for="complete" class="cursor-pointer">Complété
             <input type="checkbox" name="complete" id="complete"

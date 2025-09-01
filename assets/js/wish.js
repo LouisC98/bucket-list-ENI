@@ -5,6 +5,7 @@ document.addEventListener('turbo:load', function() {
     // RECHERCHE WISH
     const searchInput = document.getElementById('searchInput');
     const sortSelect = document.getElementById('sortSelect');
+    const categorySelect = document.getElementById('categorySelect');
     const wishesContainer = document.getElementById('wishesContainer');
     const completeCheckbox = document.getElementById('complete');
     const incompleteCheckbox = document.getElementById('incomplete');
@@ -13,13 +14,14 @@ document.addEventListener('turbo:load', function() {
         const userId = userIdInput ? userIdInput.value : null;
         const searchValue = searchInput ? searchInput.value : '';
         const sortValue = sortSelect ? sortSelect.value : 'newest';
+        const categoryValue = categorySelect ? categorySelect.value : '';
         const searchUrl = searchInput.dataset.searchUrl;
 
         let status = null;
         if (completeCheckbox.checked) status = true;
         else if (incompleteCheckbox.checked) status = false;
 
-        fetch(`${searchUrl}?search=${encodeURIComponent(searchValue)}&sort=${sortValue}&status=${status}&userId=${userId}`, {
+        fetch(`${searchUrl}?search=${encodeURIComponent(searchValue)}&sort=${sortValue}&status=${status}&userId=${userId}&categoryId=${categoryValue}`, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }
@@ -49,6 +51,12 @@ document.addEventListener('turbo:load', function() {
         });
         incompleteCheckbox.addEventListener('change', () => {
             completeCheckbox.checked = false;
+            fetchWishes()
+        });
+    }
+
+    if (categorySelect) {
+        categorySelect.addEventListener('change', () => {
             fetchWishes()
         });
     }

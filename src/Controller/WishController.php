@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Wish;
 use App\Form\WishType;
+use App\Repository\CategoryRepository;
 use App\Repository\UserRepository;
 use App\Repository\WishRepository;
 use App\Service\PaginationService;
@@ -23,7 +24,7 @@ final class WishController extends AbstractController
 {
     #[Route('/user/{id}', name: 'app_wish_user', requirements: ['id'=>'\d+'], methods: ['GET'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function userWishes(int $id, Request $request, WishSearchService $searchService, UserRepository $userRepository, PaginationService $paginationService): Response
+    public function userWishes(int $id, Request $request, WishSearchService $searchService, UserRepository $userRepository, PaginationService $paginationService, CategoryRepository $categoryRepository): Response
     {
         $currentUser = $this->getUser();
         if (!$currentUser) {
@@ -60,7 +61,8 @@ final class WishController extends AbstractController
             'wishes' => $paginator,
             'isOwner' => $isOwner,
             'user' => $targetUser,
-            'pagination' => $paginationData
+            'pagination' => $paginationData,
+            'categories' => $categoryRepository->findAll(),
         ]);
     }
 
