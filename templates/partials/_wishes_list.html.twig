@@ -1,12 +1,14 @@
 {% for wish in wishes %}
     <div class="wishCard" id="wish-{{ wish.id }}" >
+        {% if wish.category is not empty %}
+            <em class="text-sm font-semibold text-gray-500">{{ wish.category.name }}</em>
+        {% endif %}
         <div class="flex justify-between items-center gap-2">
             <a href="{{ path('app_wish_show', { id: wish.id}) }}" class="flex-grow">
-                <h2 class="wishCardTitle">
+                <h2 class="wishCardTitle m-0">
                     {{ wish.title }}
                 </h2>
             </a>
-
             {% if app.user is same as(wish.author) %}
                 <button
                         class="cursor-pointer text-2xl hover:text-shadow-md hover:scale-110"

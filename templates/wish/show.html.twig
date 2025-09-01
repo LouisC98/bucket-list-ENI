@@ -5,14 +5,11 @@
 {% block body %}
 <section class="mx-auto px-2 py-5 w-full sm:w-2/3">
     <div class="grid gap-4 rounded shadow-md border border-gray-300 p-3 mb-5">
+        {% if wish.category is not empty %}
+            <em class="text-sm font-semibold text-gray-500">{{ wish.category.name }}</em>
+        {% endif %}
         <div class="flex justify-between items-center gap-2 ">
             <h1 class="text-2xl font-semibold">{{ wish.title }}</h1>
-            {#        <form method="post" action="{{ path('app_wish_status', {id: wish.id}) }}" style="display: inline;">#}
-            {#            <input type="hidden" name="_token" value="{{ csrf_token('status' ~ wish.id) }}">#}
-            {#            <button type="submit" class="cursor-pointer text-3xl" title="Changer le statut">#}
-            {#                {{ wish.isCompleted ? '✅' : '❌' }}#}
-            {#            </button>#}
-            {#        </form>#}
             {% if app.user is same as(wish.author) %}
                 <button
                         id="changeWishStatus"

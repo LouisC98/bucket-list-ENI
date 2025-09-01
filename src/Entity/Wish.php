@@ -47,6 +47,9 @@ class Wish
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
+    #[ORM\ManyToOne(inversedBy: 'wishes')]
+    private ?Category $category = null;
+
     #[ORM\PrePersist]
     public function onPersist(): void
     {
@@ -148,6 +151,18 @@ class Wish
     public function setAuthor(?User $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
