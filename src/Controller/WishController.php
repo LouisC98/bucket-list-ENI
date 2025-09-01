@@ -171,8 +171,17 @@ final class WishController extends AbstractController
 
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/{id}', name: 'app_wish_delete', requirements: ['id'=>'\d+'], methods: ['POST'])]
-    public function delete(Request $request, Wish $wish, EntityManagerInterface $entityManager): Response
+    public function delete(int $id, WishRepository $wishRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $wish = $wishRepository->find($id);
+        if (!$wish) {
+            return new JsonResponse(['error' => true, 'message' => 'Wish non trouvé ❌']);
+        }
+
+        $user = $this->getUser();
+        if ($wish->getAuthor() !== $user) {
+            return new JsonResponse(['error' => true, 'message' => 'Vous n\'êtes pas le propriétaire ❌']);
+        }
         if ($this->isCsrfTokenValid('delete'.$wish->getId(), $request->get('_token'))) {
             $entityManager->remove($wish);
             $entityManager->flush();

@@ -3,15 +3,16 @@
 namespace App\Service;
 
 use App\Repository\WishRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 
-class WishSearchService
+readonly class WishSearchService
 {
     public function __construct(
         private WishRepository $wishRepository
     ) {}
 
-    public function searchFromRequestPaginated(Request $request, bool $showOnlyPublished = true, ?int $userId = null, int $offset = 0)
+    public function searchFromRequestPaginated(Request $request, bool $showOnlyPublished = true, ?int $userId = null, int $offset = 0): Paginator
     {
         $criteria = $this->parseSearchCriteria($request, $userId);
 
