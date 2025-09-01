@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Category;
 use App\Entity\User;
 use App\Entity\Wish;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -27,6 +28,9 @@ class WishFixtures extends Fixture
 
             $userRef = 'user-' . $faker->numberBetween(0, 4);
             $wish->setAuthor($this->getReference($userRef, User::class));
+
+            $categoryRef = 'category-' . $faker->numberBetween(0, 9);
+            $wish->setCategory($this->getReference($categoryRef, Category::class));
 
             $manager->persist($wish);
         }
