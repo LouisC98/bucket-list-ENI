@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle catégorie | {{ parent() }}{% endblock %}
+
+{% block body %}
+    <section class="mx-auto px-2 pt-5">
+        <div class="text-center mb-5">
+            <h2 class="text-4xl font-semibold text-shadow-lg">Nouvelle catégorie</h2>
+        </div>
+
+        <div class="mx-auto w-full md:max-w-150">
+            {{ include('category/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+        </div>
+    </section>
+{% endblock %}

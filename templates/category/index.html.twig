@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégories | {{ parent() }}{% endblock %}
+
+{% block body %}
+    <section class="mx-auto px-2 pt-5 pb-16">
+        <h2 class="text-4xl text-center font-semibold my-4 text-shadow-lg">Catégories</h2>
+        <div class="text-center my-5">
+            <a href="{{ path('app_category_new') }}" class="btn-primary">Nouvelle catégorie</a>
+        </div>
+        <div class="mx-auto w-full md:max-w-150 rounded shadow-md border border-gray-300 p-3 space-y-4">
+            {% for category in categories %}
+                <div class="flex justify-between gap-2">
+                    <p class="font-semibold">
+                        {{ category.name }}
+                    </p>
+                    <a href="{{ path('app_category_edit', {id: category.id}) }}" class="btn-secondary">Modifier</a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
