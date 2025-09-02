@@ -3,8 +3,8 @@
 namespace App\Controller\AdminController;
 
 use App\Entity\User;
+use App\Entity\Wish;
 use App\Repository\CategoryRepository;
-use App\Repository\UserRepository;
 use App\Repository\WishRepository;
 use App\Service\PaginationService;
 use App\Service\WishSearchService;
@@ -45,16 +45,15 @@ final class WishController extends AbstractController
         ]);
     }
     #[Route('/{id}/delete', name: '_delete', methods: ['POST'])]
-    public function delete(User $user, EntityManagerInterface $entityManager, Request $request): Response
+    public function delete(Wish $wish, EntityManagerInterface $entityManager, Request $request): Response
     {
-        $userEmailDeleted = $user->getEmail();
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($user);
+        if ($this->isCsrfTokenValid('delete'.$wish->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($wish);
             $entityManager->flush();
-            $this->addFlash("error", "L'utilisateur $userEmailDeleted a été supprimé");
+            $this->addFlash("error", "Le wish a été supprimé !");
         }
 
-        return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_wish_admin_index', [], Response::HTTP_SEE_OTHER);
     }
 
 }

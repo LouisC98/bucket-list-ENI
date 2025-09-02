@@ -15,12 +15,22 @@
                                 {{ user.firstName }} {{ user.lastName}}
                             </h3>
                         </a>
-                        {{ include('user/_delete_form.html.twig') }}
+                        {% if user.id != app.user.id %}
+                            {{ include('user/_delete_form.html.twig') }}
+                        {% else %}
+                            <span class="text-white bg-green-500 px-2 py-1 rounded shadow-md">VOUS</span>
+                        {% endif %}
                     </div>
                     <div class="p-2">
-                        <div>
-                            <span class="font-semibold">Email :</span>
-                            <span class="ms-2">{{ user.email }}</span>
+                        <div class="grid grid-cols-2">
+                            <div>
+                                <span class="font-semibold">Email :</span>
+                                <span class="ms-2">{{ user.email }}</span>
+                            </div>
+                            <div class="text-end">
+                                <span class="font-semibold">Rôle :</span>
+                                <span>{{ user.roles[0] | split('_')[1] }}</span>
+                            </div>
                         </div>
                         <div>
                             <span class="font-semibold">Crée le :</span>

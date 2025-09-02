@@ -177,16 +177,19 @@ final class WishController extends AbstractController
     {
         $wish = $wishRepository->find($id);
         if (!$wish) {
-            return new JsonResponse(['error' => true, 'message' => 'Wish non trouvé ❌']);
+            $this->addFlash("error", "Wish non trouvé ❌");
+            return $this->redirectToRoute('app_wish_user', ['id' => $this->getUser()->getId()], Response::HTTP_SEE_OTHER);
         }
 
         $user = $this->getUser();
         if ($wish->getAuthor() !== $user) {
-            return new JsonResponse(['error' => true, 'message' => 'Vous n\'êtes pas le propriétaire ❌']);
+            $this->addFlash("error", "Vous n\'êtes pas le propriétaire ❌");
+            return $this->redirectToRoute('app_wish_user', ['id' => $this->getUser()->getId()], Response::HTTP_SEE_OTHER);
         }
         if ($this->isCsrfTokenValid('delete'.$wish->getId(), $request->get('_token'))) {
             $entityManager->remove($wish);
             $entityManager->flush();
+            $this->addFlash("error", "Le wish a bien été supprimé");
         }
 
         return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
