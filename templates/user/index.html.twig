@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste utilisateurs | {{ parent() }}{% endblock %}
+
+{% block body %}
+    <section class="mx-auto px-2 pt-5 pb-16">
+        <h2 class="text-4xl text-center font-semibold my-4 text-shadow-lg">Liste des utilisateurs</h2>
+
+        <div class="w-full sm:max-w-150 mx-auto space-y-4 mt-5">
+            {% for user in users %}
+                <div class="shadow-md rounded-lg">
+                    <div class="p-3 bg-primary-700 text-white rounded-t-lg  border border-gray-200 flex justify-between items-center">
+                        <a href="{{ path('app_wish_user', {id: user.id}) }}">
+                            <h3 class="text-lg font-semibold hover:scale-105 hover:text-shadow-md">
+                                {{ user.firstName }} {{ user.lastName}}
+                            </h3>
+                        </a>
+                        {{ include('user/_delete_form.html.twig') }}
+                    </div>
+                    <div class="p-2">
+                        <div>
+                            <span class="font-semibold">Email :</span>
+                            <span class="ms-2">{{ user.email }}</span>
+                        </div>
+                        <div>
+                            <span class="font-semibold">Crée le :</span>
+                            <span class="ms-2">{{ user.createdAt | date("d/m/Y") }}</span>
+                        </div>
+                        <div>
+                            <span class="font-semibold">Dernière connexion :</span>
+                            <span class="ms-2">{{ user.lastLogin | date("d/m/Y à H:i:s") }}</span>
+                        </div>
+                        <div>
+                            <span class="font-semibold">Nombre de souhait(s) :</span>
+                            <span class="ms-2">{{ user.wishes | length }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

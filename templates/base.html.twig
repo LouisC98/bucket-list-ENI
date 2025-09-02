@@ -17,6 +17,9 @@
 </head>
 <body>
     {{ include('/partials/_navbar.html.twig') }}
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ include('/partials/_navbar_admin.html.twig') }}
+    {% endif %}
     {{ include('/partials/_flashes.html.twig') }}
     {% block body %}{% endblock %}
     {{ include('/partials/_footer.html.twig') }}

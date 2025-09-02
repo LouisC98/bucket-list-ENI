@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin wishes | {{ parent() }}{% endblock %}
+
+{% block body %}
+    <section class="mx-auto px-2 pt-5 pb-16">
+        <h2 class="text-4xl text-center font-semibold my-4 text-shadow-lg">Liste des wishes</h2>
+
+        {% include 'partials/_search_comp.html.twig' with {
+            'searchUrl': path('app_wish_admin_index')
+        } %}
+
+        <div id="wishesContainer">
+            {% include 'partials/_wishes_list.html.twig'
+                with {admin: is_granted('ROLE_ADMIN')}
+            %}
+        </div>
+    </section>
+{% endblock %}

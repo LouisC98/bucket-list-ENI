@@ -40,9 +40,9 @@ readonly class WishSearchService
 
         $statusParam = $request->query->get('status');
         $isCompleted = null;
-        if ($statusParam === '1' || $statusParam === 'true') {
+        if ($statusParam === 'true') {
             $isCompleted = true;
-        } elseif ($statusParam === '0' || $statusParam === 'false') {
+        } elseif ($statusParam === 'false') {
             $isCompleted = false;
         }
 

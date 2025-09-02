@@ -46,11 +46,9 @@ document.addEventListener('turbo:load', () => {
 
     const flashMessages = document.querySelectorAll('.flash-message');
     flashMessages.forEach((flashMessage) => {
-        if (flashMessage.dataset.status !== 'error') {
-            setTimeout(() => {
-                flashMessage.remove();
-            }, 5000);
-        }
+        setTimeout(() => {
+            flashMessage.remove();
+        }, 5000);
     });
 
     const burgerBtn = document.getElementById('burgerBtn')

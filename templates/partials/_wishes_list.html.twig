@@ -32,6 +32,11 @@
                 </div>
             {% endif %}
         </div>
+        {% if admin is defined and admin %}
+            <div class="text-end my-2">
+                {{ include('wish/_delete_form.html.twig', {id: wish.id}) }}
+            </div>
+        {% endif %}
         <div class="flex justify-between items-end">
             <a href="{{ path('app_wish_user', { id: wish.author.id }) }}">
                 <em class="font-medium text-gray-600 hover:text-primary-500">{{ wish.author.firstName }} {{ wish.author.lastName }}</em>

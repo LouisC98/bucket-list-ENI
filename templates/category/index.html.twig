@@ -14,7 +14,10 @@
                     <p class="font-semibold">
                         {{ category.name }}
                     </p>
-                    <a href="{{ path('app_category_edit', {id: category.id}) }}" class="btn-secondary">Modifier</a>
+                    <div class="flex gap-2 flex-wrap justify-end">
+                        {{ include('category/_delete_form.html.twig') }}
+                        <a href="{{ path('app_category_edit', {id: category.id}) }}" class="btn-secondary">Modifier</a>
+                    </div>
                 </div>
             {% endfor %}
         </div>

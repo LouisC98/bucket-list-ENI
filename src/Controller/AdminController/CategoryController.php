@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\AdminController;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
@@ -62,5 +62,22 @@ final class CategoryController extends AbstractController
             'category' => $category,
             'original_name' => $original_name,
         ]);
+    }
+
+    #[Route('/{id}/delete', name: '_delete', methods: ['POST'])]
+    public function delete(Category $category, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        if (!$category->getWishes()->isEmpty()) {
+            $this->addFlash("error", "La catégorie est reliée a des wishes");
+            return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($category);
+            $entityManager->flush();
+            $this->addFlash("error", "La catégorie a été supprimé");
+        }
+
+        return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
     }
 }
