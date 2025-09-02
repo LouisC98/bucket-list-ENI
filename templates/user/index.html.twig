@@ -9,7 +9,7 @@
         <div class="w-full sm:max-w-150 mx-auto space-y-4 mt-5">
             {% for user in users %}
                 <div class="shadow-md rounded-lg">
-                    <div class="p-3 bg-primary-700 text-white rounded-t-lg  border border-gray-200 flex justify-between items-center">
+                    <div class="p-3 text-white rounded-t-lg flex justify-between items-center bg-linear-to-t from-blue-300 to-blue-700">
                         <a href="{{ path('app_wish_user', {id: user.id}) }}">
                             <h3 class="text-lg font-semibold hover:scale-105 hover:text-shadow-md">
                                 {{ user.firstName }} {{ user.lastName}}

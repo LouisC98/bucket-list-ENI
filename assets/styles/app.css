@@ -84,11 +84,16 @@
     }
 
     .wishCard {
-        @apply mx-auto sm:w-2/3 w-full grid p-2 rounded border-gray-200 border shadow my-2 scroll-mt-30 min-h-40;
+        @apply mx-auto sm:max-w-3xl grid rounded-lg border-gray-200 border shadow my-2 scroll-mt-30 min-h-40;
     }
-    .wishCard .wishCardTitle {
-        @apply text-2xl font-semibold hover:text-primary-700 hover:text-shadow-md;
+
+    .wishCard .header {
+        @apply bg-linear-to-t from-blue-300 to-blue-600 p-3 rounded-t-lg flex items-center justify-between;
     }
+    .header h2 {
+        @apply text-2xl font-semibold text-white text-shadow-md hover:translate-x-1 ;
+    }
+
 }
 
 @layer utilities {

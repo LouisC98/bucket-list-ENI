@@ -1,14 +1,18 @@
 {% for wish in wishes %}
-    <div class="wishCard" id="wish-{{ wish.id }}" >
-        {% if wish.category is not empty %}
-            <em class="text-sm font-semibold text-gray-500">{{ wish.category.name }}</em>
-        {% endif %}
-        <div class="flex justify-between items-center gap-2">
-            <a href="{{ path('app_wish_show', { id: wish.id}) }}" class="flex-grow">
-                <h2 class="wishCardTitle m-0">
-                    {{ wish.title }}
-                </h2>
-            </a>
+    <div class="wishCard" id="wish-{{ wish.id }}">
+        <div class="header">
+            <div>
+                {% if wish.category is not empty %}
+                    <em class="text-sm font-semibold text-white">{{ wish.category.name }}</em>
+                {% endif %}
+                <div class="flex justify-between items-center gap-2">
+                    <a href="{{ path('app_wish_show', { id: wish.id}) }}" class="flex-grow">
+                        <h2 class="m-0">
+                            {{ wish.title }}
+                        </h2>
+                    </a>
+                </div>
+            </div>
             {% if app.user is same as(wish.author) %}
                 <button
                         class="cursor-pointer text-2xl hover:text-shadow-md hover:scale-110"
@@ -22,22 +26,22 @@
                 </div>
             {% endif %}
         </div>
-        <div class="relative my-2 max-h-24 overflow-hidden">
+        <div class="relative my-2 max-h-28 overflow-hidden p-4">
             <p>
-                {{ wish.description|slice(0, 255) }}{{ wish.description|length > 255 ? ' ...' : ''}}
+                {{ wish.description|slice(0, 455) }}{{ wish.description|length > 455 ? ' ...' : ''}}
             </p>
-            {% if wish.description|length > 255 %}
+            {% if wish.description|length > 455 %}
                 <div class="absolute bottom-0 left-0 w-full h-4
                     bg-gradient-to-t from-white to-transparent">
                 </div>
             {% endif %}
         </div>
         {% if admin is defined and admin %}
-            <div class="text-end my-2">
+            <div class="text-end m-2">
                 {{ include('wish/_delete_form.html.twig', {id: wish.id}) }}
             </div>
         {% endif %}
-        <div class="flex justify-between items-end">
+        <div class="flex justify-between items-end p-2">
             <a href="{{ path('app_wish_user', { id: wish.author.id }) }}">
                 <em class="font-medium text-gray-600 hover:text-primary-500">{{ wish.author.firstName }} {{ wish.author.lastName }}</em>
             </a>
