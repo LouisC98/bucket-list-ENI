@@ -29,7 +29,8 @@ class Censurator
     {
         foreach($this->bannedWords as $unwantedWord) {
             $replacement = str_repeat("*", mb_strlen($unwantedWord));
-            $string = str_ireplace($unwantedWord, $replacement, $string);
+            $pattern = '/\b' . preg_quote($unwantedWord, '/') . '\b/ui';
+            $string = preg_replace($pattern, $replacement, $string);
         }
         return $string;
     }
