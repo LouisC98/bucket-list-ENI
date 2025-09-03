@@ -22,9 +22,7 @@ class Censurator
             throw new \RuntimeException("Impossible de lire le fichier des mots bannis : {$this->bannedWordsFile}");
         }
 
-        $this->bannedWords = array_map(function($word) {
-            return strtolower(trim($word));
-        }, $content);
+        $this->bannedWords = $content;
     }
 
     public function purify(string $string): string
