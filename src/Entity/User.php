@@ -62,6 +62,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Wish::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $wishes;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isVerified = false;
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt;
 
@@ -134,6 +136,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->roles = $roles;
 
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
         return $this;
     }
 

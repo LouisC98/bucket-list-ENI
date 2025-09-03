@@ -2,7 +2,6 @@
 
 namespace App\Controller\AdminController;
 
-use App\Entity\User;
 use App\Entity\Wish;
 use App\Repository\CategoryRepository;
 use App\Repository\WishRepository;
