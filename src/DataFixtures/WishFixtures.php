@@ -6,11 +6,19 @@ use App\Entity\Category;
 use App\Entity\User;
 use App\Entity\Wish;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
-class WishFixtures extends Fixture
+class WishFixtures extends Fixture implements DependentFixtureInterface
 {
+    public function getDependencies(): array
+    {
+        return [
+            UserFixtures::class,
+            CategoryFixtures::class,
+        ];
+    }
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create("fr_FR");
@@ -33,6 +41,8 @@ class WishFixtures extends Fixture
             $wish->setCategory($this->getReference($categoryRef, Category::class));
 
             $manager->persist($wish);
+
+            $this->addReference('wish-' . $i, $wish);
         }
 
         $manager->flush();

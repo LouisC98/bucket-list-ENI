@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Wish;
+use App\Form\CommentType;
 use App\Form\WishType;
 use App\Repository\CategoryRepository;
+use App\Repository\CommentRepository;
 use App\Repository\UserRepository;
 use App\Repository\WishRepository;
 use App\Service\PaginationService;
@@ -90,16 +93,36 @@ final class WishController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_wish_show', requirements: ['id'=>'\d+'], methods: ['GET'])]
-    public function show(int $id, WishRepository $wishRepository): Response
+    #[Route('/{id}', name: 'app_wish_show', requirements: ['id'=>'\d+'], methods: ['GET', 'POST'])]
+    public function show(int $id, WishRepository $wishRepository, Request $request, EntityManagerInterface $entityManager, CommentRepository $commentRepository): Response
     {
         $wish = $wishRepository->find($id);
         if (!$wish) {
             $this->addFlash('error', 'Wish non trouvé ❌');
             return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
+
+        $comments = $commentRepository->findBy(['wish' => $wish], ['createdAt' => 'DESC']);
+
+        $user = $this->getUser();
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setWish($wish);
+            $comment->setUser($user);
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_wish_show', ['id' => $wish->getId()], Response::HTTP_SEE_OTHER);
+        }
+
         return $this->render('wish/show.html.twig', [
             'wish' => $wish,
+            'form' => $form->createView(),
+            'comments' => $comments,
         ]);
     }
 

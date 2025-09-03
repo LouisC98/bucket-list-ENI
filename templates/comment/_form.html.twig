@@ -1,0 +1,26 @@
+<div class="border rounded-lg p-3 shadow-md border-gray-200 hidden" id="newCommentForm">
+    {{ form_start(form) }}
+    <h4 class="text-center text-shadow-md font-semibold text-xl">Ecrire un commentaire</h4>
+    <div class="w-10 mb-3">
+        {{ form_label(form.note, null, {'label_attr': {'class': 'font-semibold text-gray-700'}}) }}
+        {{ form_widget(form.note, {'attr': {'class': 'grid grid-cols-2 gap-1 items-center text-yellow-500 text-xl'}}) }}
+        {{ form_errors(form.note) }}
+    </div>
+    <div class="grid gap-2">
+        {{ form_widget(form.content, {'attr': {'class': 'border border-gray-200 rounded p-1'}}) }}
+        {{ form_errors(form.content) }}
+    </div>
+    <div class="text-end mt-3">
+        <button class="btn-primary" type="submit">
+            {% if comment is defined %}
+                Modifier
+            {% else %}
+                Envoyer
+            {% endif %}
+        </button>
+        {% if comment is defined %}
+            <button type="button" class="btn-secondary" id="cancelEditBtn-{{ comment.id }}">Annuler</button>
+        {% endif %}
+    </div>
+    {{ form_end(form) }}
+</div>

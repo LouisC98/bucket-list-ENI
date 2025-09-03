@@ -41,7 +41,7 @@
                 {{ include('wish/_delete_form.html.twig', {id: wish.id}) }}
             </div>
         {% endif %}
-        <div class="flex justify-between items-end p-2">
+        <div class="flex justify-between items-end p-2 pb-0">
             <a href="{{ path('app_wish_user', { id: wish.author.id }) }}">
                 <em class="font-medium text-gray-600 hover:text-primary-500">{{ wish.author.firstName }} {{ wish.author.lastName }}</em>
             </a>
@@ -51,6 +51,12 @@
                 <span>{{ wish.createdAt|date('d/m/Y') }}</span>
             </div>
         </div>
+        {% if wish.comments |length > 0%}
+            <div class="text-center pb-1">
+                <a href="{{ path('app_wish_show', {id: wish.id}) }}" class="font-semibold text-blue-900 hover:text-blue-400">Voir {{ wish.comments | length }} commentaire(s)</a>
+            </div>
+        {% endif %}
+
     </div>
 {% else %}
     <div class="mt-5">

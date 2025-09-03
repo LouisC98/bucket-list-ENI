@@ -3,7 +3,7 @@
 {% block title %}Wish | {{ parent() }}{% endblock %}
 
 {% block body %}
-<section class="mx-auto px-2 py-5 w-full sm:w-2/3 md:1/2">
+<section class="mx-auto px-2 py-15 w-full sm:w-2/3 md:1/2">
     <div class="wishCard" id="wish-{{ wish.id }}">
         <div class="header">
             <div>
@@ -50,14 +50,28 @@
             </div>
         </div>
     </div>
-    <div class="flex justify-between mt-6 gap-2">
-        <a href="{{ path('app_home') }}" class="btn-secondary">Retour à la liste</a>
-        {% if app.user is same as(wish.author) %}
-        <div class="flex gap-2">
+    {% if app.user is same as(wish.author) %}
+        <div class="flex justify-end mt-6 gap-2">
             <a href="{{ path('app_wish_edit', {'id': wish.id}) }}" class="btn-primary">Modifier</a>
             {{ include('wish/_delete_form.html.twig') }}
         </div>
     {% endif %}
+
+    {% if app.user %}
+        <div class="text-end my-3">
+            <button id="showNewCommentFormBtn" class="btn-primary">Ajouter un commentaire</button>
+        </div>
+        {{ include('comment/_form.html.twig') }}
+    {% endif %}
+
+    <div class="grid gap-3 mt-3">
+        {% for comment in comments %}
+            {{ include('comment/_card.html.twig', {comment: comment}) }}
+        {% endfor %}
+    </div>
+
+    <div class="mt-6">
+        <a href="{{ path('app_home') }}" class="btn-secondary">Retour à la liste</a>
     </div>
 <section>
 {% endblock %}

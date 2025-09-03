@@ -21,6 +21,16 @@ class UserFixtures extends Fixture
     {
         $faker = Factory::create("fr_FR");
 
+        $user = new User();
+        $user->setEmail('louis@gmail.com');
+        $user->setFirstName('Louis');
+        $user->setLastName('Carvalho');
+        $user->setCreatedAt(new \DateTimeImmutable);
+
+        $hashedPassword = $this->passwordHasher->hashPassword($user, 'azerty');
+        $user->setPassword($hashedPassword);
+        $manager->persist($user);
+
         for ($i = 0; $i < 5; $i++) {
             $user = new User();
             $user->setEmail($faker->unique()->email());

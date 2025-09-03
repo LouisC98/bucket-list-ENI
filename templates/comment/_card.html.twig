@@ -1,0 +1,27 @@
+<div class="p-2 rounded border border-gray-200 shadow-md" id="comment-{{ comment.id }}">
+    <div class="flex items-center gap-2">
+        <span class="font-semibold">Note : </span>
+        <span class="text-yellow-500 text-xl">{% for i in 1..comment.note %}★{% endfor %}{% if comment.note < 5 %}{% for i in 1..(5-comment.note) %}☆{% endfor %}{% endif %}</span>
+    </div>
+    <p class="p-2">
+        {{ comment.content }}
+    </p>
+    <div class="flex justify-between">
+        <a href="{{ path('app_wish_user', {id: comment.user.id}) }}" class="font-semibold text-gray-600 hover:text-primary-500">
+            <em class="">{{ comment.user.firstName }} {{ comment.user.lastName }}</em>
+        </a>
+        <span class="text-gray-500">
+            {{ comment.createdAt | date('d/m/Y - H:i:s') }}
+            {% if comment.updatedAt %}
+                - modifié
+            {% endif %}
+        </span>
+
+    </div>
+    {% if app.user is same as comment.user or is_granted('ROLE_ADMIN') %}
+        <div class="mt-2 flex gap-2 justify-center">
+            <button data-comment-id="{{ comment.id }}" id="editCommentBtn-{{ comment.id }}" class="btn-primary">Modifier</button>
+            <button data-comment-id="{{ comment.id }}" id="deleteCommentBtn-{{ comment.id }}" class="btn-danger">Supprimer</button>
+        </div>
+    {% endif %}
+</div>
