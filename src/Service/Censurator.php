@@ -27,16 +27,10 @@ class Censurator
 
     public function purify(string $string): string
     {
-        $words = explode(' ', $string);
-
-        foreach ($words as &$word) {
-            $cleanWord = strtolower(trim($word, '.,!?;:'));
-
-            if (in_array($cleanWord, $this->bannedWords)) {
-                $word = str_repeat('*', strlen($cleanWord));
-            }
+        foreach($this->bannedWords as $unwantedWord) {
+            $replacement = str_repeat("*", mb_strlen($unwantedWord));
+            $string = str_ireplace($unwantedWord, $replacement, $string);
         }
-
-        return implode(' ', $words);
+        return $string;
     }
 }
