@@ -26,6 +26,7 @@ class UserFixtures extends Fixture
         $user->setFirstName('Louis');
         $user->setLastName('Carvalho');
         $user->setCreatedAt(new \DateTimeImmutable);
+        $user->setIsVerified(true);
 
         $hashedPassword = $this->passwordHasher->hashPassword($user, 'azerty');
         $user->setPassword($hashedPassword);

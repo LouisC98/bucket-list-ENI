@@ -8,7 +8,7 @@
                 <div class="flex justify-between items-center gap-2">
                     <a href="{{ path('app_wish_show', { id: wish.id}) }}" class="flex-grow">
                         <h2 class="m-0">
-                            {{ wish.title }}
+                            {{ wish.title|purify }}
                         </h2>
                     </a>
                 </div>
@@ -28,7 +28,7 @@
         </div>
         <div class="relative my-2 max-h-28 overflow-hidden p-4">
             <p>
-                {{ wish.description|slice(0, 455) }}{{ wish.description|length > 455 ? ' ...' : ''}}
+                {{ wish.description|purify|slice(0, 455) }}{{ wish.description|length > 455 ? ' ...' : ''}}
             </p>
             {% if wish.description|length > 455 %}
                 <div class="absolute bottom-0 left-0 w-full h-4
