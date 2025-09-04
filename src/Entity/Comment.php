@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
@@ -18,10 +19,12 @@ class Comment
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank(message: 'Le contenu du commentaire ne peux pas être vide')]
+    #[Groups(['wish:read'])]
     private ?string $content = null;
 
     #[ORM\Column]
     #[Assert\Range(notInRangeMessage: 'La note doit être comprise entre {{ min }} et {{ max }}.', min: 0, max: 5)]
+    #[Groups(['wish:read'])]
     private ?int $note = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
@@ -30,8 +33,10 @@ class Comment
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['wish:read'])]
     private ?User $user = null;
     #[ORM\Column]
+    #[Groups(['wish:read'])]
     private ?\DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]

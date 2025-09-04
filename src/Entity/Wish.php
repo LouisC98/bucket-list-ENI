@@ -2,20 +2,34 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\WishRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: WishRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ApiResource(
+    operations: [
+        new GetCollection()
+    ],
+    normalizationContext: ['groups' => ['wish:read']],
+    paginationEnabled: true
+)]
 class Wish
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['wish:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -24,6 +38,7 @@ class Wish
         max: 255,
         maxMessage: "Le titre ne peut pas dépasser {{ limit }} caractères"
     )]
+    #[Groups(['wish:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -31,12 +46,14 @@ class Wish
         max: 1000,
         maxMessage: "La description ne peut pas dépasser {{ limit }} caractères"
     )]
+    #[Groups(['wish:read'])]
     private ?string $description = null;
 
     #[ORM\Column]
     private ?bool $isCompleted = false;
 
     #[ORM\Column]
+    #[Groups(['wish:read'])]
     private ?\DateTimeImmutable $createdAt;
 
     #[ORM\Column]
@@ -47,15 +64,18 @@ class Wish
 
     #[ORM\ManyToOne(inversedBy: 'wishes')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['wish:read'])]
     private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'wishes')]
+    #[Groups(['wish:read'])]
     private ?Category $category = null;
 
     /**
      * @var Collection<int, Comment>
      */
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'wish', orphanRemoval: true)]
+    #[Groups(['wish:read'])]
     private Collection $comments;
 
     public function __construct()

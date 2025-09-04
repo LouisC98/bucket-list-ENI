@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -46,6 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max: 20,
         maxMessage: "Le pseudo de l'utilisateur ne peut pas dépasser {{ limit }} caractères"
     )]
+    #[Groups(['wish:read'])]
     private ?string $pseudo = null;
 
     /**

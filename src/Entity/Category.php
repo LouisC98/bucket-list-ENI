@@ -6,6 +6,7 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -19,6 +20,7 @@ class Category
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank(message: "Le nom de la catégorie ne peut pas être vide")]
     #[Assert\Length(max: 50, maxMessage: 'Le nom de la catégorie ne doit pas dépasser {{ limit }} caractères')]
+    #[Groups(['wish:read'])]
     private ?string $name = null;
 
     /**
