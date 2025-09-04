@@ -25,9 +25,7 @@ class WishRepository extends ServiceEntityRepository
         if ($search) {
             $qb->leftJoin('w.author', 'a')
                 ->where('w.title LIKE :search')
-                ->orWhere('a.firstName LIKE :search')
-                ->orWhere('a.lastName LIKE :search')
-                ->orWhere("CONCAT(a.firstName, ' ', a.lastName) LIKE :search")
+                ->orWhere('a.pseudo LIKE :search')
                 ->setParameter('search', '%' . $search . '%');
         }
 

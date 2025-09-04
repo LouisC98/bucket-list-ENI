@@ -43,7 +43,7 @@
         {% endif %}
         <div class="flex justify-between items-end p-2 pb-0">
             <a href="{{ path('app_wish_user', { id: wish.author.id }) }}">
-                <em class="font-medium text-gray-600 hover:text-primary-500">{{ wish.author.firstName }} {{ wish.author.lastName }}</em>
+                <em class="font-medium text-gray-600 hover:text-primary-500">{{ wish.author.pseudo }}</em>
             </a>
             <div>
                 <em class="text-gray-500">{{ wish.isPublished ? 'Public' : 'Privé'}}</em>

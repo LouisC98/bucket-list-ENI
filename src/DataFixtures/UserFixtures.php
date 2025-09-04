@@ -23,8 +23,7 @@ class UserFixtures extends Fixture
 
         $user = new User();
         $user->setEmail('louis@gmail.com');
-        $user->setFirstName('Louis');
-        $user->setLastName('Carvalho');
+        $user->setPseudo("loux");
         $user->setCreatedAt(new \DateTimeImmutable);
         $user->setIsVerified(true);
 
@@ -35,8 +34,7 @@ class UserFixtures extends Fixture
         for ($i = 0; $i < 5; $i++) {
             $user = new User();
             $user->setEmail($faker->unique()->email());
-            $user->setFirstName($faker->firstName());
-            $user->setLastName($faker->lastName());
+            $user->setPseudo($faker->name);
             $user->setCreatedAt(\DateTimeImmutable::createFromMutable(
                 $faker->dateTimeBetween('-2 years', 'now')
             ));

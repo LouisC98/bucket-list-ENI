@@ -30,6 +30,6 @@ readonly class LoginSubscriber implements EventSubscriberInterface
         $this->entityManager->flush();
 
         $session = $this->requestStack->getSession();
-        $session->getFlashBag()->add('success', 'Vous êtes connecté en tant que ' . $user->getFirstName() . ' ' . $user->getLastName() . ' !');
+        $session->getFlashBag()->add('success', 'Vous êtes connecté en tant que ' . $user->getPseudo(). ' !');
     }
 }

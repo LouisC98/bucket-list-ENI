@@ -40,21 +40,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 50)]
-    #[Assert\NotBlank(message: 'Le prénom est obligatoire')]
+    #[ORM\Column(length: 20)]
+    #[Assert\NotBlank(message: 'Le pseudo est obligatoire')]
     #[Assert\Length(
-        max: 50,
-        maxMessage: "Le prénom de l'auteur ne peut pas dépasser {{ limit }} caractères"
+        max: 20,
+        maxMessage: "Le pseudo de l'utilisateur ne peut pas dépasser {{ limit }} caractères"
     )]
-    private ?string $firstName = null;
-
-    #[ORM\Column(length: 100)]
-    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
-    #[Assert\Length(
-        max: 100,
-        maxMessage: "Le nom de l'auteur ne peut pas dépasser {{ limit }} caractères"
-    )]
-    private ?string $lastName = null;
+    private ?string $pseudo = null;
 
     /**
      * @var Collection<int, Wish>
@@ -171,26 +163,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // @deprecated, to be removed when upgrading to Symfony 8
     }
 
-    public function getFirstName(): ?string
+    public function getPseudo(): ?string
     {
-        return $this->firstName;
+        return $this->pseudo;
     }
 
-    public function setFirstName(string $firstName): static
+    public function setPseudo(string $pseudo): static
     {
-        $this->firstName = $firstName;
-
-        return $this;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): static
-    {
-        $this->lastName = $lastName;
+        $this->pseudo = $pseudo;
 
         return $this;
     }

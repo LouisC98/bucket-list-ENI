@@ -17,17 +17,10 @@
             </div>
 
             <div class="grid">
-                {{ form_label(registrationForm.firstName, 'Prénom', {'label_attr': {'class': 'font-semibold text-gray-700'}}) }}
-                {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control border rounded p-1'}}) }}
+                {{ form_label(registrationForm.pseudo, 'Nom', {'label_attr': {'class': 'font-semibold text-gray-700'}}) }}
+                {{ form_widget(registrationForm.pseudo, {'attr': {'class': 'form-control border rounded p-1'}}) }}
                 <div class="text-red-500 font-semibold text-end text-sm">
-                    {{ form_errors(registrationForm.firstName) }}
-                </div>
-            </div>
-            <div class="grid">
-                {{ form_label(registrationForm.lastName, 'Nom', {'label_attr': {'class': 'font-semibold text-gray-700'}}) }}
-                {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control border rounded p-1'}}) }}
-                <div class="text-red-500 font-semibold text-end text-sm">
-                    {{ form_errors(registrationForm.lastName) }}
+                    {{ form_errors(registrationForm.pseudo) }}
                 </div>
             </div>
             <div class="grid">
@@ -43,7 +36,6 @@
             </div>
         </div>
         {{ form_end(registrationForm) }}
-
     </section>
 
 {% endblock %}

@@ -4,7 +4,7 @@
     {% if isOwner %}
         My Wishes
     {% else %}
-        {{ user.firstName }} {{ user.lastName }}
+        {{ user.pseudo }}
     {% endif %}
     | {{ parent() }}
 {% endblock %}
@@ -17,7 +17,7 @@
                 {% else %}
                 Liste de
                 <br>
-                {{ user.firstName }} {{ user.lastName }}
+                {{ user.pseudo }}
             {% endif %}
         </h2>
         {% if isOwner %}
