@@ -13,6 +13,7 @@
         <a href="{{ path('app_home') }}" class="block p-2">Accueil</a>
         <a href="{{ path('app_wish_new') }}" class="block p-2">Nouveau souhait</a>
         <a href="{{ path('app_about') }}" class="block p-2">À propos</a>
+        <a href="{{ path('app_events_index') }}" class="block p-2">Events</a>
         {% if app.user %}
             <a href="{{ path('app_wish_user', {id: app.user.id}) }}" class="block p-2">Ma bucket list</a>
             <a href="{{ path('app_logout') }}" class="block p-2">Se déconnecter</a>
@@ -25,6 +26,7 @@
         <a href="{{ path('app_home') }}">Accueil</a>
         <a href="{{ path('app_wish_new') }}">Nouveau souhait</a>
         <a href="{{ path('app_about') }}">À propos</a>
+        <a href="{{ path('app_events_index') }}">Events</a>
         {% if app.user %}
             <a href="{{ path('app_wish_user', {id: app.user.id}) }}">Ma bucket list</a>
             <a href="{{ path('app_logout') }}">Se déconnecter</a>
