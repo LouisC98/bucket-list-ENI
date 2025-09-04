@@ -19,7 +19,7 @@ final class EventsController extends AbstractController
         $startDateString = $request->query->getString('startDate');
 
         $page = $request->query->getInt('page', 1);
-        $rows = $request->query->getInt('rows', 10);
+        $rows = 10;
         $start = ($page - 1) * $rows;
 
         $apiUrl = sprintf(
